@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Analysis Test</title>
+</head>
+<body>
+    <h1>Fruits vs Vegetables Power Analysis</h1>
+    <p>Open the browser console (F12) to see the detailed power analysis!</p>
+    
+    <script src="frontend/game-ui.js"></script>
+    <script>
+        // Just run the power calculator to see analysis
+        const powerCalc = new PowerCalculator();
+        const analysis = powerCalc.analyzeBalance();
+        
+        document.body.innerHTML += `
+            <h2>Quick Summary:</h2>
+            <p><strong>🍎 Fruit Average Power:</strong> ${Math.round(analysis.fruitAvg)}</p>
+            <p><strong>🥬 Vegetable Average Power:</strong> ${Math.round(analysis.vegAvg)}</p>
+            <p><strong>⚖️ Balance Ratio:</strong> ${(analysis.ratio * 100).toFixed(1)}% (vegetables vs fruits)</p>
+            <p><strong>Conclusion:</strong> ${analysis.ratio > 0.9 ? '✅ Well balanced!' : analysis.ratio > 0.7 ? '⚠️ Slightly unbalanced' : '❌ Needs rebalancing'}</p>
+        `;
+    </script>
+</body>
+</html> 
