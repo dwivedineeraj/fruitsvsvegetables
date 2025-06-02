@@ -53,18 +53,6 @@ const fruitData = [
     }
   },
   {
-    "name": "Tangerine",
-    "type": "fruit",
-    "stats_per_kg": {
-      "Energy_kcal": 530,
-      "Water_g": 854.0,
-      "Sugars_g": 105.4,
-      "Fiber_g": 18,
-      "VitaminC_mg": 266,
-      "Potassium_mg": 1660
-    }
-  },
-  {
     "name": "Strawberry",
     "type": "fruit",
     "stats_per_kg": {
@@ -233,30 +221,6 @@ const fruitData = [
     }
   },
   {
-    "name": "Grapefruit",
-    "type": "fruit",
-    "stats_per_kg": {
-      "Energy_kcal": 420,
-      "Water_g": 880.6,
-      "Sugars_g": 68.9,
-      "Fiber_g": 16,
-      "VitaminC_mg": 312,
-      "Potassium_mg": 1350
-    }
-  },
-  {
-    "name": "Plum",
-    "type": "fruit",
-    "stats_per_kg": {
-      "Energy_kcal": 460,
-      "Water_g": 873.9,
-      "Sugars_g": 99.2,
-      "Fiber_g": 14,
-      "VitaminC_mg": 94,
-      "Potassium_mg": 1570
-    }
-  },
-  {
     "name": "Tomato",
     "type": "fruit",
     "stats_per_kg": {
@@ -266,42 +230,6 @@ const fruitData = [
       "Fiber_g": 12,
       "VitaminC_mg": 138,
       "Potassium_mg": 2370
-    }
-  },
-  {
-    "name": "Lime",
-    "type": "fruit",
-    "stats_per_kg": {
-      "Energy_kcal": 300,
-      "Water_g": 884.2,
-      "Sugars_g": 17,
-      "Fiber_g": 28,
-      "VitaminC_mg": 293,
-      "Potassium_mg": 1020
-    }
-  },
-  {
-    "name": "Raspberry",
-    "type": "fruit",
-    "stats_per_kg": {
-      "Energy_kcal": 520,
-      "Water_g": 857.5,
-      "Sugars_g": 44.2,
-      "Fiber_g": 65,
-      "VitaminC_mg": 262,
-      "Potassium_mg": 1510
-    }
-  },
-  {
-    "name": "Blackberry",
-    "type": "fruit",
-    "stats_per_kg": {
-      "Energy_kcal": 430,
-      "Water_g": 881.5,
-      "Sugars_g": 48.8,
-      "Fiber_g": 53,
-      "VitaminC_mg": 210,
-      "Potassium_mg": 1620
     }
   },
   
@@ -355,18 +283,6 @@ const fruitData = [
     }
   },
   {
-    "name": "Kale",
-    "type": "vegetable",
-    "stats_per_kg": {
-      "Energy_kcal": 490,
-      "Water_g": 840.4,
-      "Sugars_g": 23.2,
-      "Fiber_g": 36,
-      "VitaminC_mg": 1200,
-      "Potassium_mg": 4910
-    }
-  },
-  {
     "name": "Sweet Potato",
     "type": "vegetable",
     "stats_per_kg": {
@@ -388,18 +304,6 @@ const fruitData = [
       "Fiber_g": 5,
       "VitaminC_mg": 28,
       "Potassium_mg": 1470
-    }
-  },
-  {
-    "name": "Lettuce",
-    "type": "vegetable",
-    "stats_per_kg": {
-      "Energy_kcal": 150,
-      "Water_g": 949.6,
-      "Sugars_g": 7.8,
-      "Fiber_g": 13,
-      "VitaminC_mg": 92,
-      "Potassium_mg": 1940
     }
   },
   {
@@ -427,54 +331,6 @@ const fruitData = [
     }
   },
   {
-    "name": "Cabbage",
-    "type": "vegetable",
-    "stats_per_kg": {
-      "Energy_kcal": 250,
-      "Water_g": 925.2,
-      "Sugars_g": 32.2,
-      "Fiber_g": 25,
-      "VitaminC_mg": 365,
-      "Potassium_mg": 1700
-    }
-  },
-  {
-    "name": "Cauliflower",
-    "type": "vegetable",
-    "stats_per_kg": {
-      "Energy_kcal": 250,
-      "Water_g": 920.9,
-      "Sugars_g": 19.3,
-      "Fiber_g": 20,
-      "VitaminC_mg": 484,
-      "Potassium_mg": 2990
-    }
-  },
-  {
-    "name": "Zucchini",
-    "type": "vegetable",
-    "stats_per_kg": {
-      "Energy_kcal": 170,
-      "Water_g": 949.2,
-      "Sugars_g": 24.9,
-      "Fiber_g": 10,
-      "VitaminC_mg": 175,
-      "Potassium_mg": 2610
-    }
-  },
-  {
-    "name": "Celery",
-    "type": "vegetable",
-    "stats_per_kg": {
-      "Energy_kcal": 160,
-      "Water_g": 949.5,
-      "Sugars_g": 19.1,
-      "Fiber_g": 16,
-      "VitaminC_mg": 31,
-      "Potassium_mg": 2600
-    }
-  },
-  {
     "name": "Eggplant",
     "type": "vegetable",
     "stats_per_kg": {
@@ -495,7 +351,6 @@ const fruitEmojis = {
   'Green Apple': '🍏',
   'Banana': '🍌',
   'Orange': '🍊',
-  'Tangerine': '🍊',
   'Strawberry': '🍓',
   'Blueberry': '🫐',
   'Grapes': '🍇',
@@ -510,28 +365,17 @@ const fruitEmojis = {
   'Pear': '🍐',
   'Peach': '🍑',
   'Coconut': '🥥',
-  'Grapefruit': '🍊',
-  'Plum': '🟣',
   'Tomato': '🍅',
-  'Lime': '🟢',
-  'Raspberry': '🔴',
-  'Blackberry': '⚫',
   
   // Vegetables
   'Broccoli': '🥦',
   'Spinach': '🥬',
   'Carrot': '🥕',
   'Bell Pepper': '🫑',
-  'Kale': '🥬',
   'Sweet Potato': '🍠',
   'Cucumber': '🥒',
-  'Lettuce': '🥬',
   'Onion': '🧅',
   'Potato': '🥔',
-  'Cabbage': '🥬',
-  'Cauliflower': '🥦',
-  'Zucchini': '🥒',
-  'Celery': '🥬',
   'Eggplant': '🍆'
 };
 
@@ -628,6 +472,15 @@ class PowerCalculator {
 // Game state
 class FruitCardGameUI {
   constructor() {
+    // Show loading screen and start initialization
+    this.initializeGame();
+  }
+  
+  async initializeGame() {
+    // Start loading process
+    this.updateLoadingProgress(10, "Initializing game...");
+    
+    // Initialize basic properties
     this.allFruits = fruitData.map(fruit => fruit.name);
     this.attributes = ['Energy_kcal', 'Water_g', 'Sugars_g', 'Fiber_g', 'VitaminC_mg', 'Potassium_mg'];
     this.attributeNames = {
@@ -647,9 +500,15 @@ class FruitCardGameUI {
       'Potassium_mg': 'bg-purple-500'
     };
     
+    this.updateLoadingProgress(30, "Calculating nutrition values...");
+    await this.delay(500);
+    
     // Initialize power calculator and analyze balance
     this.powerCalculator = new PowerCalculator();
     this.balanceAnalysis = this.powerCalculator.analyzeBalance();
+    
+    this.updateLoadingProgress(50, "Setting up computer opponents...");
+    await this.delay(500);
     
     // Team selection
     this.playerTeam = null; // 'fruit' or 'vegetable'
@@ -685,6 +544,9 @@ class FruitCardGameUI {
     
     this.currentComputer = this.getRandomComputer();
     
+    this.updateLoadingProgress(70, "Loading player options...");
+    await this.delay(500);
+    
     // Available user icons
     this.userIconOptions = [
       '👤', '👨', '👩', '🧑', '👦', '👧', 
@@ -696,8 +558,47 @@ class FruitCardGameUI {
     // Load user profile from localStorage
     this.loadUserProfile();
     
+    this.updateLoadingProgress(90, "Finalizing setup...");
+    await this.delay(500);
+    
     this.initializeEventListeners();
+    
+    // Update profile button after everything is loaded
+    this.updateProfileButton();
+    
+    this.updateLoadingProgress(100, "Ready to play!");
+    await this.delay(500);
+    
+    // Hide loading screen and start game
+    this.hideLoadingScreen();
     this.resetGame(); // Automatically start the game
+  }
+  
+  updateLoadingProgress(percentage, message) {
+    const progressBar = document.getElementById('loadingProgress');
+    const loadingText = document.querySelector('#loadingScreen p');
+    
+    if (progressBar) {
+      progressBar.style.width = percentage + '%';
+    }
+    if (loadingText) {
+      loadingText.textContent = message;
+    }
+  }
+  
+  hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+      loadingScreen.style.opacity = '0';
+      loadingScreen.style.transition = 'opacity 0.5s ease-out';
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+      }, 500);
+    }
+  }
+  
+  delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
   
   loadUserProfile() {
@@ -707,6 +608,7 @@ class FruitCardGameUI {
       this.userName = profile.userName || '';
       this.userIcon = profile.userIcon || '👤';
       this.profileSetup = !!(profile.userName && profile.userIcon);
+      this.updateProfileButton();
     }
   }
   
@@ -717,6 +619,18 @@ class FruitCardGameUI {
     };
     localStorage.setItem('fruitVeggieGameProfile', JSON.stringify(profile));
     this.profileSetup = true;
+    this.updateProfileButton();
+  }
+  
+  updateProfileButton() {
+    const profileBtn = document.getElementById('profileBtn');
+    if (profileBtn && this.userIcon) {
+      // Update the profile button to show user's icon
+      profileBtn.innerHTML = `
+        <div class="text-lg">${this.userIcon}</div>
+        <span class="hidden sm:inline">Me!</span>
+      `;
+    }
   }
   
   showProfileSetup() {
@@ -724,26 +638,26 @@ class FruitCardGameUI {
     
     teamSelectionContent.innerHTML = `
       <div class="text-center mb-6">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">👋 Welcome to the Battle! 👋</h2>
-        <p class="text-gray-600 mb-4">First, let's set up your profile</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-purple-800 mb-3 fun-font">👋 Hi There! 👋</h2>
+        <p class="text-base text-purple-600 mb-4 bubble-font">Let's set up your awesome profile!</p>
       </div>
       
       <!-- Username Input -->
       <div class="mb-6">
-        <label class="block text-sm font-bold text-gray-700 mb-2">Your Battle Name:</label>
+        <label class="block text-base font-bold text-gray-700 mb-2 fun-font">Your Cool Name:</label>
         <input type="text" id="usernameInput" 
-               class="w-full px-4 py-3 border-2 border-blue-300 rounded-lg text-center text-lg font-bold focus:border-blue-500 focus:outline-none"
-               placeholder="Enter your awesome name..."
+               class="w-full px-4 py-4 border-4 border-purple-300 rounded-2xl text-center text-lg font-bold focus:border-purple-500 focus:outline-none bubble-font shadow-lg"
+               placeholder="Type your name here..."
                value="${this.userName}"
                maxlength="20">
       </div>
       
       <!-- Icon Selection -->
       <div class="mb-6">
-        <label class="block text-sm font-bold text-gray-700 mb-3">Choose Your Avatar:</label>
+        <label class="block text-base font-bold text-gray-700 mb-3 fun-font">Pick Your Avatar:</label>
         <div class="grid grid-cols-6 gap-3">
           ${this.userIconOptions.map(icon => `
-            <button class="user-icon-btn ${this.userIcon === icon ? 'bg-blue-100 border-blue-500' : 'bg-white border-blue-300'} hover:bg-blue-50 border-2 hover:border-blue-500 rounded-lg p-3 text-center hover:scale-110 transform transition shadow hover:shadow-lg" data-icon="${icon}">
+            <button class="user-icon-btn ${this.userIcon === icon ? 'bg-yellow-200 border-yellow-500 scale-110' : 'bg-white border-purple-300'} hover:bg-yellow-100 border-4 hover:border-yellow-500 rounded-2xl p-3 text-center hover:scale-125 transform transition shadow-lg hover:shadow-xl btn-bounce" data-icon="${icon}">
               <div class="text-2xl">${icon}</div>
             </button>
           `).join('')}
@@ -752,8 +666,8 @@ class FruitCardGameUI {
       
       <!-- Save Button -->
       <div class="text-center">
-        <button id="saveProfileBtn" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transform transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-          🚀 Start Battling!
+        <button id="saveProfileBtn" class="btn-rainbow bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-xl transform transition hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed fun-font">
+          🚀 Let's Battle!
         </button>
       </div>
     `;
@@ -773,11 +687,11 @@ class FruitCardGameUI {
       btn.addEventListener('click', (e) => {
         // Remove selection from all buttons
         document.querySelectorAll('.user-icon-btn').forEach(b => {
-          b.className = 'user-icon-btn bg-white border-blue-300 hover:bg-blue-50 border-2 hover:border-blue-500 rounded-lg p-3 text-center hover:scale-110 transform transition shadow hover:shadow-lg';
+          b.className = 'user-icon-btn bg-white border-purple-300 hover:bg-yellow-100 border-4 hover:border-yellow-500 rounded-2xl p-3 text-center hover:scale-125 transform transition shadow-lg hover:shadow-xl btn-bounce';
         });
         
         // Add selection to clicked button
-        btn.className = 'user-icon-btn bg-blue-100 border-blue-500 border-2 rounded-lg p-3 text-center transform scale-110 shadow-lg';
+        btn.className = 'user-icon-btn bg-yellow-200 border-yellow-500 scale-110 border-4 rounded-2xl p-3 text-center transform shadow-xl';
         
         this.userIcon = btn.dataset.icon;
         this.updateSaveButton();
@@ -883,59 +797,51 @@ class FruitCardGameUI {
       // Show team selection
       teamSelectionContent.innerHTML = `
         <div class="text-center mb-6">
-          <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">🏆 Choose Your Team! 🏆</h2>
+          <h2 class="text-2xl md:text-3xl font-bold text-purple-800 mb-3 fun-font">🏆 Choose Your Side! 🏆</h2>
           
           <!-- VS Display -->
-          <div class="bg-gradient-to-r from-blue-100 via-purple-100 to-red-100 rounded-xl p-4 mb-4 shadow-lg border-2 border-gray-200">
-            <div class="flex items-center justify-center space-x-4">
-              <div class="text-center">
-                <div class="text-3xl mb-1">${this.userIcon}</div>
-                <div class="text-lg font-bold text-blue-800">${this.userName}</div>
+          <div class="bg-gradient-to-r from-blue-100 via-purple-100 to-red-100 rounded-2xl p-4 mb-4 shadow-xl border-4 border-rainbow-300">
+            <div class="flex items-center justify-center space-x-8">
+              <div class="text-center flex-1">
+                <div class="text-4xl mb-2 flex justify-center">${this.userIcon}</div>
+                <div class="text-base md:text-lg font-bold text-blue-800 fun-font">${this.userName}</div>
               </div>
               
               <div class="flex flex-col items-center">
-                <div class="text-2xl font-bold text-red-600 mb-1">⚔️ VS ⚔️</div>
-                <div class="text-xs text-gray-500 italic">Battle Arena</div>
+                <div class="text-2xl font-bold text-red-600 mb-1 fun-font">⚔️ VS ⚔️</div>
+                <div class="text-base text-gray-600 italic bubble-font">Battle Time!</div>
               </div>
               
-              <div class="text-center">
-                <div class="text-3xl mb-1">${this.currentComputer.icon}</div>
-                <div class="text-lg font-bold text-red-800">${this.currentComputer.name}</div>
+              <div class="text-center flex-1">
+                <div class="text-4xl mb-2 flex justify-center">${this.currentComputer.icon}</div>
+                <div class="text-base md:text-lg font-bold text-red-800 fun-font">${this.currentComputer.name}</div>
               </div>
             </div>
             <div class="text-center mt-2">
-              <div class="text-xs text-gray-600 italic">${this.currentComputer.style}</div>
+              <div class="text-base text-gray-600 italic bubble-font">${this.currentComputer.style}</div>
             </div>
           </div>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <!-- Team Fruit -->
-          <button id="selectFruitTeam" class="team-selection-btn bg-gradient-to-br from-blue-100 to-purple-100 border-3 border-blue-300 hover:border-blue-500 rounded-xl p-6 text-center hover:scale-105 transform transition shadow-lg hover:shadow-xl">
+          <!-- Fruits -->
+          <button id="selectFruitTeam" class="team-selection-btn bg-gradient-to-br from-blue-100 to-purple-100 border-4 border-blue-300 hover:border-blue-500 rounded-3xl p-6 text-center hover:scale-110 transform transition shadow-xl hover:shadow-2xl btn-bounce">
             <div class="text-6xl mb-4">🍎</div>
-            <h3 class="text-xl font-bold text-blue-800 mb-2">Team Fruit</h3>
-            <p class="text-sm text-blue-600 mb-3">Sweet, energetic, and packed with natural sugars!</p>
-            <div class="text-xs text-gray-600">
-              <div class="font-semibold mb-1">Average Power: ${Math.round(this.balanceAnalysis.fruitAvg)}</div>
-              <div>Top players: Apple, Banana, Coconut...</div>
-            </div>
+            <h3 class="text-xl font-bold text-blue-800 mb-2 fun-font">Fruits</h3>
+            <p class="text-base text-blue-600 bubble-font">Sweet & Natural! 🍯</p>
           </button>
           
-          <!-- Team Vegetable -->
-          <button id="selectVegetableTeam" class="team-selection-btn bg-gradient-to-br from-green-100 to-teal-100 border-3 border-green-300 hover:border-green-500 rounded-xl p-6 text-center hover:scale-105 transform transition shadow-lg hover:shadow-xl">
+          <!-- Vegetables -->
+          <button id="selectVegetableTeam" class="team-selection-btn bg-gradient-to-br from-green-100 to-teal-100 border-4 border-green-300 hover:border-green-500 rounded-3xl p-6 text-center hover:scale-110 transform transition shadow-xl hover:shadow-2xl btn-wiggle">
             <div class="text-6xl mb-4">🥬</div>
-            <h3 class="text-xl font-bold text-green-800 mb-2">Team Vegetable</h3>
-            <p class="text-sm text-green-600 mb-3">Nutritious powerhouses with vitamins and minerals!</p>
-            <div class="text-xs text-gray-600">
-              <div class="font-semibold mb-1">Average Power: ${Math.round(this.balanceAnalysis.vegAvg)}</div>
-              <div>Top players: Kale, Broccoli, Spinach...</div>
-            </div>
+            <h3 class="text-xl font-bold text-green-800 mb-2 fun-font">Vegetables</h3>
+            <p class="text-base text-green-600 bubble-font">Healthy & Strong! 💪</p>
           </button>
         </div>
         
         <div class="text-center">
-          <div class="text-xs text-gray-500 bg-gray-100 px-4 py-2 rounded-full inline-block">
-            ${this.currentComputer.name} ${this.currentComputer.icon} can choose from both teams to keep the challenge fair!
+          <div class="text-base text-gray-500 bg-gradient-to-r from-yellow-100 to-pink-100 px-4 py-2 rounded-full inline-block border-2 border-yellow-300 bubble-font">
+            ${this.currentComputer.name} ${this.currentComputer.icon} can pick from both sides! 🎯
           </div>
         </div>
       `;
@@ -968,19 +874,20 @@ class FruitCardGameUI {
   }
   
   updateTeamDisplay() {
-    // Only update team display if we're in the main game view
-    // Update the "You" section to show team and icon
-    const playerSection = document.querySelector('.text-blue-600');
-    if (playerSection && this.teamSelected && this.profileSetup) {
-      const teamIcon = this.playerTeam === 'fruit' ? '🍎' : '🥬';
-      const teamName = this.playerTeam === 'fruit' ? 'Fruit' : 'Vegetable';
-      playerSection.textContent = `${this.userName} ${this.userIcon} (Team ${teamName} ${teamIcon})`;
+    // Update player avatar and name
+    const playerAvatar = document.getElementById('playerAvatar');
+    const playerName = document.getElementById('playerName');
+    if (playerAvatar && playerName && this.profileSetup) {
+      playerAvatar.textContent = this.userIcon;
+      playerName.textContent = this.userName;
     }
     
-    // Update the computer section
-    const computerSection = document.querySelector('.text-red-600');
-    if (computerSection) {
-      computerSection.textContent = `${this.currentComputer.name} ${this.currentComputer.icon}`;
+    // Update computer avatar and name
+    const computerAvatar = document.getElementById('computerAvatar');
+    const computerName = document.getElementById('computerName');
+    if (computerAvatar && computerName) {
+      computerAvatar.textContent = this.currentComputer.icon;
+      computerName.textContent = this.currentComputer.name;
     }
     
     // Update static computer references in HTML
@@ -1039,25 +946,16 @@ class FruitCardGameUI {
     const selectionTitle = this.isTiebreaker 
       ? `<h2 class="text-xl font-bold text-red-600 mb-2">⚡ SUDDEN DEATH! ⚡</h2>
          <p class="text-sm text-gray-700 mb-3">Choose your ${this.playerTeam} for the final battle!</p>`
-      : `<h2 class="text-xl font-bold text-${teamColor}-600 mb-2">${teamIcon} Team ${teamName} Selection ${teamIcon}</h2>
-         <p class="text-sm text-gray-700 mb-3">Choose your ${this.playerTeam} fighter (3 random available):</p>`;
+      : `<h2 class="text-xl font-bold text-${teamColor}-600 mb-2">${teamIcon} Choose Your ${teamName} ${teamIcon}</h2>
+         <p class="text-sm text-gray-700 mb-3">Pick your fighter (3 available):</p>`;
     
     fruitSelectionContent.innerHTML = `
       <div class="text-center mb-4">
         ${selectionTitle}
-        <div class="flex justify-center space-x-4 text-xs text-gray-500 mb-2">
-          <span>${teamIcon} ${teamName}: ${activeItems.length} active, ${lockedItems.length} locked, ${usedItems.length} used</span>
-        </div>
-        <div class="text-xs text-gray-500">
-          Your Team Power: ${this.playerTeam === 'fruit' ? Math.round(this.balanceAnalysis.fruitAvg) : Math.round(this.balanceAnalysis.vegAvg)}
-        </div>
       </div>
       
       <!-- Player's Team Section -->
       <div class="mb-4">
-        <h3 class="text-lg font-bold text-${teamColor}-600 mb-3 flex items-center justify-center">
-          ${teamIcon} Your ${teamName} <span class="ml-2 text-sm font-normal text-gray-500">(${activeItems.length} available, ${lockedItems.length} locked, ${usedItems.length} used)</span>
-        </h3>
         <div class="flex overflow-x-auto scrollbar-hide gap-4 pb-4 px-2" 
              style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
           ${this.createItemCards(teamItems, activeItems.map(item => item.name))}
@@ -1067,7 +965,7 @@ class FruitCardGameUI {
       <!-- Team Info -->
       <div class="flex justify-center mt-3">
         <div class="text-xs text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
-          ${this.currentComputer.name} chooses from both teams • ${teamIcon} vs 🤖
+          ${this.currentComputer.name} chooses from both sides • ${teamIcon} vs 🤖
         </div>
       </div>
     `;
@@ -1105,37 +1003,25 @@ class FruitCardGameUI {
       const powerScore = itemData.powerScore || 0;
       const typeIcon = itemData.type === 'fruit' ? '🍎' : '🥬';
       
-      let buttonClass, textClass, borderClass, statusText, statusColor;
+      let buttonClass, textClass;
       
       if (isUsed) {
         // Used items - gray style
         buttonClass = 'bg-gray-100 border-2 border-gray-300 opacity-60';
         textClass = 'text-gray-400';
-        borderClass = 'border-gray-300';
-        statusText = '✓ Used';
-        statusColor = 'text-gray-400';
       } else if (isLocked) {
-        // Locked items - darker gray with lock icon
+        // Locked items - darker gray
         buttonClass = 'bg-gray-200 border-2 border-gray-400 opacity-70';
         textClass = 'text-gray-500';
-        borderClass = 'border-gray-400';
-        statusText = '🔒 Locked';
-        statusColor = 'text-gray-500';
       } else if (this.isTiebreaker) {
         // Available items in tiebreaker - red theme
         buttonClass = 'bg-red-50 hover:bg-red-100 border-2 border-red-300 hover:border-red-500 hover:scale-105 transform transition shadow-lg hover:shadow-xl';
         textClass = 'text-gray-800';
-        borderClass = 'border-red-300 hover:border-red-500';
-        statusText = 'Click to select ✨';
-        statusColor = 'text-red-600';
       } else {
         // Available items in normal game - type-based theme
         const themeColor = itemData.type === 'fruit' ? 'blue' : 'green';
         buttonClass = `bg-white hover:bg-${themeColor}-50 border-2 border-${themeColor}-300 hover:border-${themeColor}-500 hover:scale-105 transform transition shadow-lg hover:shadow-xl`;
         textClass = 'text-gray-800';
-        borderClass = `border-${themeColor}-300 hover:border-${themeColor}-500`;
-        statusText = 'Click to select ✨';
-        statusColor = itemData.type === 'fruit' ? 'text-blue-600' : 'text-green-600';
       }
       
       return `
@@ -1154,9 +1040,8 @@ class FruitCardGameUI {
             <!-- Item emoji and name -->
             <div class="text-3xl mb-2 ${(isUsed || isLocked) ? 'grayscale' : ''}">${emoji}</div>
             <h3 class="text-xs font-bold ${textClass} text-center leading-tight mb-3">${itemName}</h3>
-            ${(isUsed || isLocked) ? `<div class="text-xs ${statusColor} mb-2">${statusText}</div>` : ''}
             
-            <!-- Full attribute preview -->
+            <!-- Attribute preview -->
             <div class="w-full space-y-1">
               ${this.attributes.map(attr => {
                 const value = itemData.stats_per_kg[attr];
@@ -1174,8 +1059,8 @@ class FruitCardGameUI {
             </div>
             
             ${isAvailable ? `
-              <div class="mt-2 text-xs font-semibold ${statusColor}">
-                ${statusText}
+              <div class="mt-2 text-xs font-semibold text-${itemData.type === 'fruit' ? 'blue' : 'green'}-600">
+                Tap to select ✨
               </div>
             ` : ''}
           </div>
@@ -1358,9 +1243,11 @@ class FruitCardGameUI {
     // Create and show a floating message
     const gameArea = document.getElementById('gameArea');
     const floatingDiv = document.createElement('div');
-    floatingDiv.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-blue-400 rounded-xl p-4 shadow-2xl z-50 animate-bounce';
+    floatingDiv.className = 'fixed inset-0 flex items-center justify-center z-50 pointer-events-none';
     floatingDiv.innerHTML = `
-      <div class="text-lg font-bold text-gray-800 text-center">${message}</div>
+      <div class="bg-white border-4 border-blue-400 rounded-xl p-6 shadow-2xl animate-bounce pointer-events-auto">
+        <div class="text-xl font-bold text-gray-800 text-center">${message}</div>
+      </div>
     `;
     
     document.body.appendChild(floatingDiv);
@@ -1398,13 +1285,13 @@ class FruitCardGameUI {
     
     // Get player/computer display info
     const playerIcon = isHumanPlayer ? this.userIcon : this.currentComputer.icon;
-    const playerName = isHumanPlayer ? this.userName || 'You' : this.currentComputer.name;
+    const playerName = isHumanPlayer ? (this.userName || 'You') : this.currentComputer.name;
     
     // Add instruction message for player when it's their turn
     const instructionMessage = canClick ? 
-      `<div class="bg-blue-100 border border-blue-300 rounded-lg p-2 mb-3 animate-pulse">
+      `<div class="bg-blue-100 border border-blue-300 rounded-lg p-2 mb-2 animate-pulse">
          <div class="text-xs font-semibold text-blue-800 text-center">
-           👆 Click any attribute to attack!
+           👆 Tap any stat to attack!
          </div>
        </div>` : '';
     
@@ -1415,13 +1302,18 @@ class FruitCardGameUI {
           ${typeIcon} ${powerScore}
         </div>
         
-        <!-- Player/Computer Icon -->
-        <div class="absolute top-0 left-0 bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded-br-lg rounded-tl-lg shadow-lg">
-          ${playerIcon}
+        <!-- Player/Computer Info -->
+        <div class="flex items-center justify-center mb-2 bg-gray-100 rounded-lg py-1 px-2">
+          <div class="text-lg mr-2">${playerIcon}</div>
+          <div class="text-sm font-bold text-gray-700 truncate max-w-24">${playerName}</div>
         </div>
         
-        <div class="text-4xl md:text-5xl mb-2">${emoji}</div>
-        <h3 class="text-base md:text-lg font-bold text-gray-800 mb-3">${fruitName}</h3>
+        <!-- Fruit/Veggie Name and Icon Side by Side -->
+        <div class="flex items-center justify-center mb-3">
+          <div class="text-4xl mr-2">${emoji}</div>
+          <h3 class="text-lg font-bold text-gray-800 truncate max-w-32">${fruitName}</h3>
+        </div>
+        
         ${instructionMessage}
         <div class="grid grid-cols-2 gap-2 text-sm">
           ${this.attributes.map(attr => {
@@ -1452,16 +1344,21 @@ class FruitCardGameUI {
           ? ???
         </div>
         
-        <!-- Computer Icon -->
-        <div class="absolute top-0 left-0 bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded-br-lg rounded-tl-lg shadow-lg">
-          ${this.currentComputer.icon}
+        <!-- Player/Computer Info -->
+        <div class="flex items-center justify-center mb-2 bg-gray-100 rounded-lg py-1 px-2">
+          <div class="text-lg mr-2">${this.currentComputer.icon}</div>
+          <div class="text-sm font-bold text-gray-700 truncate max-w-24">${this.currentComputer.name}</div>
         </div>
         
-        <div class="text-4xl md:text-5xl mb-2">🎴</div>
-        <h3 class="text-base md:text-lg font-bold text-gray-500 mb-3">Hidden Card</h3>
-        <div class="bg-gray-200 rounded-lg p-4">
-          <div class="text-gray-500 font-semibold text-xl">?</div>
-          <div class="text-sm text-gray-400 mt-2">Opponent's card is hidden!</div>
+        <!-- Hidden Card Display -->
+        <div class="flex items-center justify-center mb-3">
+          <div class="text-4xl mr-2">🎴</div>
+          <h3 class="text-lg font-bold text-gray-500 truncate max-w-32">Hidden Card</h3>
+        </div>
+        
+        <div class="bg-gray-200 rounded-lg p-3">
+          <div class="text-gray-500 font-semibold text-base">?</div>
+          <div class="text-xs text-gray-400 mt-1">Opponent's card is hidden!</div>
         </div>
       </div>
     `;
@@ -1478,6 +1375,7 @@ class FruitCardGameUI {
     
     // Get player/computer display info
     const playerIcon = isHumanPlayer ? this.userIcon : this.currentComputer.icon;
+    const playerName = isHumanPlayer ? (this.userName || 'You') : this.currentComputer.name;
     
     // Add crown or other indicators for winners
     let statusIcon = '';
@@ -1503,13 +1401,19 @@ class FruitCardGameUI {
           ${typeIcon} ${powerScore}
         </div>
         
-        <!-- Player/Computer Icon -->
-        <div class="absolute top-0 left-0 ${isWinner ? 'bg-yellow-600' : 'bg-gray-600'} text-white text-xs font-bold px-2 py-1 rounded-br-lg rounded-tl-lg shadow-lg">
-          ${playerIcon}
+        <!-- Player/Computer Info -->
+        <div class="flex items-center justify-center mb-2 ${isWinner ? 'bg-yellow-100' : 'bg-gray-100'} rounded-lg py-1 px-2">
+          <div class="text-lg mr-2">${playerIcon}</div>
+          <div class="text-sm font-bold ${isWinner ? 'text-yellow-800' : 'text-gray-700'} truncate max-w-24">${playerName}</div>
+          ${statusIcon ? `<div class="text-sm ml-1">${statusIcon}</div>` : ''}
         </div>
         
-        <div class="text-4xl md:text-5xl mb-2">${emoji}${statusIcon}</div>
-        <h3 class="text-base md:text-lg font-bold text-gray-800 mb-3">${fruitName}</h3>
+        <!-- Fruit/Veggie Name and Icon Side by Side with Status -->
+        <div class="flex items-center justify-center mb-3">
+          <div class="text-4xl mr-2">${emoji}</div>
+          <h3 class="text-lg font-bold text-gray-800 truncate max-w-32">${fruitName}</h3>
+        </div>
+        
         <div class="grid grid-cols-2 gap-2 text-sm">
           ${this.attributes.map(attr => {
             const value = fruitData.stats_per_kg[attr];
@@ -1625,33 +1529,6 @@ class FruitCardGameUI {
     document.getElementById('player1Score').textContent = this.player1Score;
     document.getElementById('player2Score').textContent = this.player2Score;
     
-    // Update current player indicator with better styling
-    let indicatorText = 'Game Over!';
-    let indicatorClass = 'text-gray-400';
-    
-    if (!this.gameOver) {
-      if (this.isTiebreaker) {
-        indicatorText = '⚡ SUDDEN DEATH! ⚡';
-        indicatorClass = 'text-red-600 font-bold animate-pulse';
-      } else if (this.cardSelectionMode) {
-        const teamName = this.teamSelected ? (this.playerTeam === 'fruit' ? 'Fruit' : 'Vegetable') : 'Item';
-        indicatorText = `🍎 ${this.userName || 'You'} - Choose Your ${teamName}!`;
-        indicatorClass = 'text-blue-600 font-semibold';
-      } else {
-        if (this.currentPlayer === 1) {
-          indicatorText = `👆 ${this.userName || 'Your'} Turn - Click Attribute!`;
-          indicatorClass = 'text-blue-600 font-semibold animate-pulse';
-        } else {
-          indicatorText = `🤖 ${this.currentComputer.name}'s Turn`;
-          indicatorClass = 'text-red-600 font-semibold';
-        }
-      }
-    }
-    
-    const indicator = document.getElementById('currentPlayerIndicator');
-    indicator.textContent = indicatorText;
-    indicator.className = `text-xs ${indicatorClass}`;
-    
     // Update stars (visual score representation) with animation
     this.updateStars('player1Stars', this.player1Score);
     this.updateStars('player2Stars', this.player2Score);
@@ -1671,7 +1548,7 @@ class FruitCardGameUI {
       star.className = 'w-6 h-6 text-lg transition-all duration-300';
       if (i < score) {
         star.textContent = '⭐';
-        star.className += ' animate-pulse';
+        star.className += ' animate-bounce star-bounce';
       } else {
         star.textContent = '☆';
         star.className += ' opacity-50';
@@ -1689,40 +1566,40 @@ class FruitCardGameUI {
     if (this.winner === 0) {
       winnerIcon = '🤝';
       loserIcon = '';
-      winnerText = 'Perfect Draw!';
-      subtitle = 'Amazing! You both played equally well!';
+      winnerText = 'Amazing Tie! 🤝';
+      subtitle = 'You both played super well!';
     } else if (this.winner === 1) {
-      winnerIcon = '👑👤';
+      winnerIcon = '🎉👑';
       loserIcon = '😔🤖';
-      winnerText = `${this.userName || 'You'} Win!`;
-      subtitle = `Congratulations ${this.userName || 'You'}! You outsmarted ${this.currentComputer.name}!`;
+      winnerText = `${this.userName || 'You'} Win! 🏆`;
+      subtitle = `Awesome job ${this.userName || 'You'}! You beat ${this.currentComputer.name}!`;
     } else {
       winnerIcon = '👑🤖';
       loserIcon = '😔👤';
-      winnerText = `${this.currentComputer.name} Wins!`;
-      subtitle = `Good try ${this.userName || 'You'}! ${this.currentComputer.name} was strategic this time.`;
+      winnerText = `${this.currentComputer.name} Wins! 🏆`;
+      subtitle = `Good try ${this.userName || 'You'}! ${this.currentComputer.name} was super smart!`;
     }
     
     // Update the modal content
     const modalContent = modal.querySelector('.bg-white');
     modalContent.innerHTML = `
-      <div class="text-6xl md:text-8xl mb-4 animate-bounce">${winnerIcon}</div>
-      <h2 class="text-2xl md:text-3xl font-bold mb-2 text-gray-800">${winnerText}</h2>
-      <p class="text-gray-600 mb-2 text-sm md:text-base">${subtitle}</p>
+      <div class="text-6xl md:text-7xl mb-4 animate-bounce">${winnerIcon}</div>
+      <h2 class="text-2xl md:text-3xl font-bold mb-2 text-purple-800 fun-font">${winnerText}</h2>
+      <p class="text-purple-600 mb-2 text-base md:text-lg bubble-font">${subtitle}</p>
       ${loserIcon ? `<div class="text-3xl mb-4">${loserIcon}</div>` : ''}
-      <div class="bg-gray-100 rounded-lg p-3 mb-4">
-        <div class="text-sm font-semibold text-gray-700 mb-2">Final Score</div>
-        <div class="flex justify-center space-x-4">
+      <div class="bg-gradient-to-r from-yellow-100 to-pink-100 rounded-2xl p-4 mb-4 border-4 border-yellow-300">
+        <div class="text-base font-bold text-gray-700 mb-2 fun-font">Final Score 📊</div>
+        <div class="flex justify-center space-x-6">
           <div class="text-center">
-            <div class="text-lg font-bold text-blue-600">${this.userName || 'You'}: ${this.player1Score}</div>
+            <div class="text-lg font-bold text-blue-600 fun-font">${this.userName || 'You'}: ${this.player1Score}</div>
           </div>
           <div class="text-center">
-            <div class="text-lg font-bold text-red-600">${this.currentComputer.name}: ${this.player2Score}</div>
+            <div class="text-lg font-bold text-red-600 fun-font">${this.currentComputer.name}: ${this.player2Score}</div>
           </div>
         </div>
       </div>
-      <button id="playAgainBtn" class="bg-fruit-green hover:bg-green-500 text-white font-bold py-3 px-6 rounded-lg text-lg shadow-lg transform transition hover:scale-105">
-        🔄 Play Again
+      <button id="playAgainBtn" class="btn-bounce bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg shadow-xl transform transition hover:scale-110 fun-font">
+        🔄 Play Again!
       </button>
     `;
     

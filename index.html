@@ -39,6 +39,8 @@
     <link rel="icon" type="image/png" sizes="512x512" href="./frontend/icons/icon-512.png">
     <link rel="apple-touch-icon" href="./frontend/icons/icon-192.png">
     
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./frontend/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -55,104 +57,58 @@
             }
         }
     </script>
-    <style>
-        .card-flip {
-            transition: transform 0.3s ease;
-        }
-        .card-flip:hover {
-            transform: scale(1.05);
-        }
-        .bounce-in {
-            animation: bounceIn 0.5s ease;
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        /* Victory celebration animation */
-        @keyframes celebrate {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            25% { transform: scale(1.1) rotate(-5deg); }
-            75% { transform: scale(1.1) rotate(5deg); }
-        }
-        
-        .celebrate {
-            animation: celebrate 0.6s ease-in-out infinite;
-        }
-        
-        /* Pulse animation for interactive elements */
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.6); }
-        }
-        
-        .glow {
-            animation: glow 2s ease-in-out infinite;
-        }
-        
-        /* Smooth transitions for all interactive elements */
-        * {
-            transition: all 0.2s ease;
-        }
-        
-        /* Hide scrollbar for horizontal scroll */
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        
-        /* Header z-index above modals */
-        .header-above-modals {
-            z-index: 1100;
-        }
-        
-        /* Mobile optimizations */
-        .mobile-touch-improvements {
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        /* iOS Safari viewport fix */
-        @supports (-webkit-touch-callout: none) {
-            .ios-viewport-fix {
-                min-height: -webkit-fill-available;
-            }
-        }
-    </style>
 </head>
 <body class="bg-gradient-to-br from-green-100 via-yellow-50 to-orange-100 min-h-screen overflow-x-hidden ios-viewport-fix">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 z-50" style="background-image: url('starting.png'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh;">
+        <!-- Translucent overlay with loading content -->
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center">
+            <div class="text-center bg-white bg-opacity-90 rounded-2xl p-8 mx-4 shadow-2xl">
+                <h1 class="text-3xl font-bold text-purple-800 mb-4 fun-font">🍎 Loading Game... 🥬</h1>
+                <div class="w-64 bg-gray-200 rounded-full h-3 mx-auto mb-4">
+                    <div id="loadingProgress" class="bg-gradient-to-r from-blue-500 to-green-500 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <p class="text-gray-700 bubble-font font-semibold">Preparing your nutrition adventure!</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Header -->
-    <header class="bg-white shadow-lg p-3 md:p-4 sticky top-0 header-above-modals">
+    <header class="header-fun shadow-xl p-3 md:p-4 sticky top-0 header-above-modals">
         <div class="max-w-4xl mx-auto flex items-center justify-between">
             <!-- Logo Section -->
             <div class="flex items-center space-x-3 md:space-x-4">
-                <img src="./frontend/icons/icon.png" alt="Nutrition Battle" class="w-16 h-16 md:w-20 md:h-20 rounded-full shadow-xl flex-shrink-0">
-                <div class="min-w-0">
-                    <h1 class="text-base md:text-xl font-bold text-gray-800 truncate">Fruits vs Vegetables!</h1>
-                    <p class="text-xs md:text-sm text-gray-600 hidden sm:block">First to 4 wins!</p>
+                <img src="./frontend/icons/icon.png" alt="Nutrition Battle" class="w-16 h-16 md:w-20 md:h-20 rounded-full shadow-xl flex-shrink-0 hover:animate-spin">
+                <div class="min-w-0 hidden sm:block">
+                    <h1 class="text-lg md:text-2xl font-bold text-purple-800 truncate fun-font">Battle Time! 🎮</h1>
+                    <p class="text-base md:text-lg text-purple-600 bubble-font">First to 4 Wins! ⭐</p>
                 </div>
             </div>
             
             <!-- Action Buttons -->
             <div class="flex items-center space-x-2 md:space-x-3">
+                <!-- Install Button (will be shown dynamically) -->
+                <button id="installBtn" class="btn-bounce bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-pink-600 hover:to-yellow-600 text-white font-bold py-3 px-3 md:px-4 rounded-full text-sm md:text-base shadow-xl transform transition hover:scale-110 flex items-center justify-center space-x-1 md:space-x-2 min-h-[48px] min-w-[48px] fun-font" style="display: none;">
+                    <svg class="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <span class="hidden sm:inline">Get App!</span>
+                </button>
+                
                 <!-- Profile Button -->
-                <button id="profileBtn" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-3 px-3 md:px-4 rounded-full text-xs md:text-sm shadow-lg transform transition hover:scale-105 flex items-center justify-center space-x-1 md:space-x-2 min-h-[52px] min-w-[52px]">
+                <button id="profileBtn" class="btn-wiggle bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-3 md:px-4 rounded-full text-sm md:text-base shadow-xl transform transition hover:scale-110 flex items-center justify-center space-x-1 md:space-x-2 min-h-[48px] min-w-[48px] fun-font">
                     <svg class="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
-                    <span class="hidden sm:inline">Profile</span>
+                    <span class="hidden sm:inline">Me!</span>
                 </button>
                 
                 <!-- Restart Button -->
-                <button id="restartGameBtn" class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 px-3 md:px-4 rounded-full text-xs md:text-sm shadow-lg transform transition hover:scale-105 flex items-center justify-center space-x-1 md:space-x-2 min-h-[52px] min-w-[52px]">
+                <button id="restartGameBtn" class="btn-bounce bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-3 md:px-4 rounded-full text-sm md:text-base shadow-xl transform transition hover:scale-110 flex items-center justify-center space-x-1 md:space-x-2 min-h-[48px] min-w-[48px] fun-font">
                     <svg class="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                     </svg>
-                    <span class="hidden sm:inline">Restart</span>
+                    <span class="hidden sm:inline">New Game!</span>
                 </button>
             </div>
         </div>
@@ -161,68 +117,60 @@
     <!-- Game Container -->
     <div class="max-w-4xl mx-auto px-2 md:px-4 pb-2 max-h-screen overflow-y-auto mobile-touch-improvements">
         
-        <!-- Score Board -->
-        <div class="bg-white rounded-lg shadow-lg p-2 md:p-4 mb-2 md:mb-4">
+        <!-- Score Display -->
+        <div class="bg-white rounded-2xl shadow-lg p-4 mb-4 border-2 border-gray-200">
             <div class="flex justify-between items-center">
-                <div class="text-center">
-                    <h3 class="text-sm md:text-lg font-bold text-blue-600">You 👤</h3>
-                    <div class="text-xl md:text-2xl font-bold text-blue-700" id="player1Score">0</div>
-                    <div class="flex mt-1 justify-center space-x-1" id="player1Stars">
-                        <!-- Stars will be added dynamically -->
+                <!-- Player 1 Score -->
+                <div class="flex flex-col items-start">
+                    <div class="flex items-center space-x-2 mb-1">
+                        <div class="text-2xl" id="playerAvatar">👤</div>
+                        <div class="text-blue-600 font-bold text-lg bubble-font truncate max-w-32" id="playerName">You</div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="text-xl font-bold text-blue-800 fun-font"><span id="player1Score">0</span></div>
+                        <div id="player1Stars" class="flex space-x-1"></div>
                     </div>
                 </div>
                 
-                <div class="text-center">
-                    <div class="text-xs md:text-sm font-semibold text-gray-500">VS</div>
-                    <div class="text-xs text-gray-400" id="currentPlayerIndicator">Your Turn</div>
-                </div>
-                
-                <div class="text-center">
-                    <h3 class="text-sm md:text-lg font-bold text-red-600">Computer 🤖</h3>
-                    <div class="text-xl md:text-2xl font-bold text-red-700" id="player2Score">0</div>
-                    <div class="flex mt-1 justify-center space-x-1" id="player2Stars">
-                        <!-- Stars will be added dynamically -->
+                <!-- Player 2 Score -->
+                <div class="flex flex-col items-end">
+                    <div class="flex items-center space-x-2 mb-1">
+                        <div class="text-red-600 font-bold text-lg bubble-font truncate max-w-32" id="computerName">Computer</div>
+                        <div class="text-2xl" id="computerAvatar">🤖</div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div id="player2Stars" class="flex space-x-1"></div>
+                        <div class="text-xl font-bold text-red-800 fun-font"><span id="player2Score">0</span></div>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <!-- Game Area -->
-        <div id="gameArea" class="space-y-3 md:space-y-4">
+        <div id="gameArea" class="mb-4 space-y-4">
+            <!-- Computer Card (Top, 50% size) -->
+            <div class="flex justify-center">
+                <div class="w-64 transform scale-75">
+                    <div class="bg-white rounded-2xl shadow-lg p-2 border-4 border-red-400 card-fun">
+                        <div id="player2Card" class="text-center">
+                            <div class="text-5xl mb-2">🎴</div>
+                            <div class="text-gray-500 font-bold text-base bubble-font">Mystery Card!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            <!-- Cards Display - Now with more space -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                <!-- Player Card -->
-                <div class="bg-blue-50 rounded-lg p-3 md:p-4 border border-blue-200">
-                    <h4 class="text-sm md:text-base font-bold text-blue-800 mb-2 text-center">Your Card 👤</h4>
-                    <div id="player1Card" class="bg-white rounded-lg p-3 md:p-4 shadow-md card-flip">
-                        <div class="text-center text-gray-500">
-                            <div class="text-4xl md:text-6xl mb-2">🃏</div>
-                            <div class="text-sm md:text-base">Waiting for cards...</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Computer Card -->
-                <div class="bg-red-50 rounded-lg p-3 md:p-4 border border-red-200">
-                    <h4 class="text-sm md:text-base font-bold text-red-800 mb-2 text-center">Computer's Card 🤖</h4>
-                    <div id="player2Card" class="bg-white rounded-lg p-3 md:p-4 shadow-md card-flip">
-                        <div class="text-center text-gray-500">
-                            <div class="text-4xl md:text-6xl mb-2">🃏</div>
-                            <div class="text-sm md:text-base">Waiting for cards...</div>
+            <!-- Player Card (Bottom, normal size) -->
+            <div class="flex justify-center">
+                <div class="w-80">
+                    <div class="bg-white rounded-2xl shadow-xl p-3 border-4 border-blue-400 card-fun">
+                        <div id="player1Card" class="text-center">
+                            <div class="text-5xl mb-2">🎴</div>
+                            <div class="text-gray-500 font-bold text-base bubble-font">Choose Your Fighter!</div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Attribute Selection -->
-            <div id="attributeSelection" class="bg-white rounded-lg shadow-lg p-2 md:p-4" style="display: none;">
-                <h3 class="text-xl font-bold text-center mb-4 text-gray-800">Choose an Attribute to Compare!</h3>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="attributeButtons">
-                    <!-- Attribute buttons will be added dynamically -->
-                </div>
-            </div>
-
         </div>
 
         <!-- Fruit Selection Modal -->
@@ -248,168 +196,8 @@
 
     </div>
 
-    <!-- Educational Value & Safety Notice for Parents -->
-    <footer class="bg-white border-t border-gray-200 py-4 text-center">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="flex flex-wrap justify-center items-center space-x-6 text-xs text-gray-600">
-                <span class="flex items-center space-x-1">
-                    <span>🛡️</span>
-                    <span>Safe for Kids</span>
-                </span>
-                <span class="flex items-center space-x-1">
-                    <span>🎓</span>
-                    <span>Educational Content</span>
-                </span>
-                <span class="flex items-center space-x-1">
-                    <span>👨‍👩‍👧‍👦</span>
-                    <span>Parent Approved</span>
-                </span>
-                <span class="flex items-center space-x-1">
-                    <span>🥗</span>
-                    <span>Real Nutrition Facts</span>
-                </span>
-            </div>
-            <p class="text-xs text-gray-500 mt-2">Teaching healthy eating habits through interactive learning • Ages 6+</p>
-        </div>
-    </footer>
-
-    <!-- Game Logic Script -->
+    <!-- Game Logic Scripts -->
     <script src="frontend/game-ui.js"></script>
-    
-    <!-- PWA Service Worker Registration -->
-    <script>
-        // Mobile touch event improvements
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mobile debug info (remove after testing)
-            if (window.innerWidth <= 768) {
-                console.log('Mobile device detected:', {
-                    width: window.innerWidth,
-                    height: window.innerHeight,
-                    userAgent: navigator.userAgent,
-                    touchSupport: 'ontouchstart' in window
-                });
-                
-                // Add visible debug info for mobile
-                const debugDiv = document.createElement('div');
-                debugDiv.className = 'fixed top-0 left-0 bg-red-500 bg-opacity-80 text-white p-2 text-xs z-[9999] max-w-[200px] rounded-br-lg';
-                debugDiv.innerHTML = `Mobile: ${window.innerWidth}x${window.innerHeight}<br>Touch: ${('ontouchstart' in window) ? 'Yes' : 'No'}`;
-                document.body.appendChild(debugDiv);
-                
-                // Remove debug after 5 seconds
-                setTimeout(() => debugDiv.remove(), 5000);
-            }
-            
-            // Add text-base class to all text inputs to prevent zoom on focus (iOS)
-            document.querySelectorAll('input[type="text"]').forEach(input => {
-                input.classList.add('text-base', 'min-h-[44px]');
-            });
-            
-            // Prevent double-tap zoom on buttons
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function (event) {
-                const now = (new Date()).getTime();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-            
-            // Add active states for better mobile feedback
-            document.addEventListener('touchstart', function(e) {
-                if (e.target.matches('button, .attribute-stat-btn, .user-icon-btn')) {
-                    e.target.style.transform = 'scale(0.95)';
-                }
-            });
-            
-            document.addEventListener('touchend', function(e) {
-                if (e.target.matches('button, .attribute-stat-btn, .user-icon-btn')) {
-                    setTimeout(() => {
-                        e.target.style.transform = '';
-                    }, 100);
-                }
-            });
-        });
-        
-        // Register service worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./frontend/sw.js')
-                    .then(registration => {
-                        console.log('SW registered: ', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            });
-        }
-        
-        // PWA Installation Prompt
-        let deferredPrompt;
-        let installButton = null;
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('PWA install prompt triggered');
-            // Prevent Chrome 67 and earlier from automatically showing the prompt
-            e.preventDefault();
-            // Stash the event so it can be triggered later
-            deferredPrompt = e;
-            
-            // Show install button in header if not already installed
-            showInstallButton();
-        });
-        
-        function showInstallButton() {
-            // Create install button if it doesn't exist
-            if (!installButton && deferredPrompt) {
-                const header = document.querySelector('header .flex.items-center.space-x-3');
-                installButton = document.createElement('button');
-                installButton.innerHTML = `
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8-8-8 8"></path>
-                    </svg>
-                    <span>Install</span>
-                `;
-                installButton.className = 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-full text-sm shadow-lg transform transition hover:scale-105 flex items-center space-x-2';
-                installButton.onclick = installPWA;
-                
-                // Insert before profile button
-                header.insertBefore(installButton, header.firstChild);
-            }
-        }
-        
-        function installPWA() {
-            if (deferredPrompt) {
-                // Show the prompt
-                deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the PWA install prompt');
-                        // Hide install button
-                        if (installButton) {
-                            installButton.style.display = 'none';
-                        }
-                    } else {
-                        console.log('User dismissed the PWA install prompt');
-                    }
-                    deferredPrompt = null;
-                });
-            }
-        }
-        
-        // Hide install button when app is installed
-        window.addEventListener('appinstalled', (evt) => {
-            console.log('PWA was installed');
-            if (installButton) {
-                installButton.style.display = 'none';
-            }
-        });
-        
-        // Check if already running as PWA
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-            console.log('App is running as PWA');
-            // Could add PWA-specific features here
-        }
-    </script>
+    <script src="frontend/mobile-pwa.js"></script>
 </body>
-</html> 
+</html>

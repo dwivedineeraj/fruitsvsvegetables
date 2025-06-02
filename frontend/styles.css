@@ -1,0 +1,123 @@
+/* Google Fonts for Kid-Friendly Typography */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Bubblegum+Sans:wght@400&display=swap');
+
+/* Kid-Friendly Font Styles */
+.fun-font {
+    font-family: 'Fredoka One', cursive;
+}
+
+.bubble-font {
+    font-family: 'Bubblegum Sans', cursive;
+}
+
+/* Playful Button Animations */
+.btn-bounce:hover {
+    animation: bounceHover 0.6s ease-in-out;
+}
+
+.btn-wiggle:hover {
+    animation: wiggle 0.5s ease-in-out;
+}
+
+.btn-rainbow {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffd93d, #6c5ce7);
+    background-size: 300% 300%;
+    animation: rainbow 3s ease infinite;
+}
+
+.btn-rainbow:hover {
+    animation: rainbow 0.8s ease infinite, bounceHover 0.6s ease-in-out;
+}
+
+/* Colorful Card Animations */
+.card-fun {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 20px;
+    transform-origin: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-fun:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* Fun Header Styling */
+.header-fun {
+    background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+    box-shadow: 0 8px 32px rgba(255, 154, 158, 0.3);
+}
+
+/* Keyframe Animations */
+@keyframes bounceHover {
+    0%, 20%, 60%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    40% {
+        transform: translateY(-10px) scale(1.05);
+    }
+    80% {
+        transform: translateY(-4px) scale(1.02);
+    }
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(3deg); }
+    75% { transform: rotate(-3deg); }
+}
+
+@keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse-fun {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Score Stars Animation */
+.star-bounce {
+    animation: pulse-fun 2s infinite;
+}
+
+/* Mobile touch improvements */
+.mobile-touch-improvements {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* iOS Safari viewport fix */
+@supports (-webkit-touch-callout: none) {
+    .ios-viewport-fix {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Header z-index above modals */
+.header-above-modals {
+    z-index: 1100;
+}
+
+/* Hide scrollbar for horizontal scroll */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+} 
