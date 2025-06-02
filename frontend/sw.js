@@ -1,15 +1,16 @@
 const CACHE_NAME = 'nutrition-battle-v1';
+// const host = 'https://dwivedineeraj.github.io/fruitsvsvegetables/';
+const host = './';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/frontend/game-ui.js',
-  '/frontend/manifest.json',
-  '/frontend/styles.css',
-  '/tailwindcomplete.js',
-  '/starting.jpg',
-  '/frontend/icons/icon.jpg',
-  '/frontend/icons/icon-192.jpg',
-  '/frontend/icons/icon-512.jpg'
+  host,
+  host + 'index.html',
+  host + 'frontend/game-ui.js',
+  host + 'frontend/manifest.json',
+  host + 'frontend/styles.css',
+  host + 'tailwindcomplete.js',
+  host + 'starting.jpg',
+  host + 'frontend/icons/icon.jpg',
+  host + 'frontend/icons/icon-512.jpg'
 ];
 
 // Install event - cache resources
