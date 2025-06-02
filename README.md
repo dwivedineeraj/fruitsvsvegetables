@@ -18,20 +18,6 @@ A fun, educational card game for children to learn about fruit nutrition while p
 - **Simple Rules**: Easy to understand for young children
 - **Visual Feedback**: Star ratings, smooth animations, and clear results
 
-## 🏗️ Project Structure
-
-```
-gameoflife/
-├── index.html              # Main game interface
-├── frontend/
-│   └── game-ui.js          # Frontend game logic and UI
-├── backend/
-│   ├── db.js               # Fruit nutritional database
-│   ├── game.js             # Core game engine (Node.js)
-│   └── test-game.js        # Console testing
-└── README.md
-```
-
 ## 🍎 Included Fruits
 
 1. **Apple** 🍎 - Well-balanced nutrition
@@ -51,12 +37,6 @@ gameoflife/
 - **Vitamin C 🍊**: Vitamin C in milligrams per kg
 - **Potassium 💪**: Potassium in milligrams per kg
 
-## 🚀 Getting Started
-
-1. **Simple Setup**: Just open `index.html` in any modern web browser
-2. **No Installation**: Everything runs in the browser - no server needed
-3. **Mobile Ready**: Works great on phones, tablets, and desktop
-
 ## 🧒 Educational Value
 
 Children learn about:
@@ -73,13 +53,11 @@ Children learn about:
 - **Educational Settings**: Great for nutrition lessons
 - **Mobile Devices**: Designed for touch interfaces
 
-## 🔧 Technical Details
+## 🚀 Getting Started
 
-- **Frontend**: Vanilla JavaScript, HTML5, Tailwind CSS
-- **Backend**: Node.js game engine (for testing and future server features)
-- **Data**: Real USDA nutritional information
-- **Responsive**: Mobile-first design with Tailwind CSS
-- **No Dependencies**: Runs entirely in the browser
+1. **Simple Setup**: Just open `index.html` in any modern web browser
+2. **No Installation**: Everything runs in the browser - no server needed
+3. **Mobile Ready**: Works great on phones, tablets, and desktop
 
 ## 🎨 Design Features
 
@@ -89,5 +67,36 @@ Children learn about:
 - Fruit emojis for visual appeal
 - Star rating system for scores
 - Clear visual feedback for winners
+
+## 🔧 Technical Details
+
+- **Frontend**: Vanilla JavaScript, HTML5, Tailwind CSS
+- **Backend**: Node.js game engine (for testing and future server features)
+- **Data**: Real USDA nutritional information
+- **Responsive**: Mobile-first design with Tailwind CSS
+- **No Dependencies**: Runs entirely in the browser
+
+## 🏗️ Project Structure
+
+```
+gameoflife/
+├── index.html              # Main game interface for the Fruit Card Battle
+├── starting.jpg            # Loading screen background image
+├── icon.jpg                # Main application icon (used in header)
+├── test_power.html         # Developer utility for game balance analysis
+├── frontend/
+│   ├── styles.css          # Custom CSS styles for the game
+│   ├── tailwind-backup.css # Fallback Tailwind CSS if CDN fails
+│   ├── game-ui.js          # Core frontend game logic, UI rendering, and PWA interactions
+│   ├── mobile-pwa.js       # JavaScript for PWA-specific features (e.g., install prompt)
+│   ├── sw.js               # Service worker for PWA caching and offline capabilities
+│   ├── manifest.json       # Web app manifest for PWA configuration
+│   └── icons/              # Directory for PWA icons (various sizes)
+├── backend/                # (Currently for local testing/future server-side features)
+│   ├── db.js               # Fruit nutritional database (Node.js module)
+│   ├── game.js             # Core game engine logic (Node.js module)
+│   └── test-game.js        # Console-based script for testing backend game logic
+└── README.md               # This file: project overview, setup, and documentation
+```
 
 Enjoy playing and learning about fruits! 🍎🍌🍊 

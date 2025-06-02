@@ -655,13 +655,16 @@ class FruitCardGameUI {
       <!-- Icon Selection -->
       <div class="mb-6">
         <label class="block text-base font-bold text-gray-700 mb-3 fun-font">Pick Your Avatar:</label>
-        <div class="grid grid-cols-4 sm:grid-cols-6 gap-3 justify-items-center">
-          ${this.userIconOptions.map(icon => `
-            <button class="user-icon-btn ${this.userIcon === icon ? 'bg-yellow-200 border-yellow-500 scale-110' : 'bg-white border-purple-300'} hover:bg-yellow-100 border-4 hover:border-yellow-500 rounded-2xl p-3 text-center hover:scale-125 transform transition shadow-lg hover:shadow-xl btn-bounce" data-icon="${icon}">
-              <div class="text-2xl">${icon}</div>
-            </button>
-          `).join('')}
+        <div class="overflow-x-auto scrollbar-hide">
+          <div class="grid grid-rows-2 grid-flow-col auto-cols-max gap-3 justify-start pb-2" style="grid-template-rows: repeat(2, minmax(0, 1fr));">
+            ${this.userIconOptions.map(icon => `
+              <button class="user-icon-btn ${this.userIcon === icon ? 'bg-yellow-200 border-yellow-500 scale-110' : 'bg-white border-purple-300'} hover:bg-yellow-100 border-4 hover:border-yellow-500 rounded-2xl p-3 text-center hover:scale-125 transform transition shadow-lg hover:shadow-xl btn-bounce min-w-[60px]" data-icon="${icon}">
+                <div class="text-2xl">${icon}</div>
+              </button>
+            `).join('')}
+          </div>
         </div>
+        <p class="text-xs text-gray-500 mt-2 text-center">← Scroll horizontally to see more avatars →</p>
       </div>
       
       <!-- Save Button -->
@@ -808,8 +811,8 @@ class FruitCardGameUI {
               </div>
               
               <div class="flex flex-col items-center">
-                <div class="text-2xl font-bold text-red-600 mb-1 fun-font">⚔️ VS ⚔️</div>
-                <div class="text-base text-gray-600 italic bubble-font">Battle Time!</div>
+                <div class="text-2xl font-bold text-red-600 mb-1 fun-font">VS</div>
+                <div class="text-base text-gray-600 italic bubble-font">⚔️</div>
               </div>
               
               <div class="text-center flex-1">
@@ -823,7 +826,7 @@ class FruitCardGameUI {
           </div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="grid grid-cols-2 gap-6 mb-6">
           <!-- Fruits -->
           <button id="selectFruitTeam" class="team-selection-btn bg-gradient-to-br from-blue-100 to-purple-100 border-4 border-blue-300 hover:border-blue-500 rounded-3xl p-6 text-center hover:scale-110 transform transition shadow-xl hover:shadow-2xl btn-bounce">
             <div class="text-6xl mb-4">🍎</div>
@@ -1191,7 +1194,7 @@ class FruitCardGameUI {
         winner: 1,
         value1,
         value2,
-        message: `🎉 ${this.userName || 'You'} Win! 🎉`
+        message: `🎉 You Win! 🎉`
       };
     } else if (value2 > value1) {
       this.player2Score++;
@@ -1254,7 +1257,7 @@ class FruitCardGameUI {
     const floatingDiv = document.createElement('div');
     floatingDiv.className = 'fixed inset-0 flex items-center justify-center z-50 pointer-events-none';
     floatingDiv.innerHTML = `
-      <div class="bg-white border-4 border-blue-400 rounded-xl p-6 shadow-2xl animate-bounce pointer-events-auto">
+      <div class="bg-white border-4 border-blue-400 rounded-xl p-6 w-full shadow-2xl animate-bounce pointer-events-auto">
         <div class="text-xl font-bold text-gray-800 text-center">${message}</div>
       </div>
     `;
@@ -1292,14 +1295,32 @@ class FruitCardGameUI {
     const fruitType = fruitData.type || 'fruit';
     const typeIcon = fruitType === 'fruit' ? '🍎' : '🥬';
     
-    // Get player/computer display info
     const playerIcon = isHumanPlayer ? this.userIcon : this.currentComputer.icon;
     const playerName = isHumanPlayer ? (this.userName || 'You') : this.currentComputer.name;
     
-    // Add instruction message for player when it's their turn
+    // Conditional styling: smaller for computer (playerNumber === 2)
+    const pInfoIconSize = isHumanPlayer ? 'text-base' : 'text-sm';
+    const pInfoNameSize = isHumanPlayer ? 'text-xs' : 'text-[0.6rem]';
+    const pInfoPadding = isHumanPlayer ? 'py-0.5 px-1' : 'py-0 px-0.5';
+    const pInfoMarginBottom = isHumanPlayer ? 'mb-1' : 'mb-0.5';
+    const pInfoMaxWidth = isHumanPlayer ? 'max-w-20' : 'max-w-16';
+
+    const fInfoEmojiSize = isHumanPlayer ? 'text-3xl' : 'text-2xl';
+    const fInfoNameSize = isHumanPlayer ? 'text-base' : 'text-sm';
+    const fInfoMarginBottom = isHumanPlayer ? 'mb-1.5' : 'mb-1';
+    const fInfoMaxWidth = isHumanPlayer ? 'max-w-28' : 'max-w-24';
+
+    const instrPadding = isHumanPlayer ? 'p-1 mb-1.5' : 'p-0.5 mb-1'; // instruction message padding
+    const instrTextSize = isHumanPlayer ? 'text-[0.65rem]' : 'text-[0.55rem]'; // instruction message text
+
+    const gridGap = isHumanPlayer ? 'gap-1' : 'gap-0.5';
+    const statBlockPadding = isHumanPlayer ? 'p-1' : 'p-0.5';
+    const statNameSize = isHumanPlayer ? 'text-[0.65rem]' : 'text-[0.55rem]';
+    const statValueSize = isHumanPlayer ? 'text-xs' : 'text-[0.6rem]';
+    
     const instructionMessage = canClick ? 
-      `<div class="bg-blue-100 border border-blue-300 rounded-lg p-2 mb-2 animate-pulse">
-         <div class="text-xs font-semibold text-blue-800 text-center">
+      `<div class="bg-blue-100 border border-blue-300 rounded-lg ${instrPadding} animate-pulse">
+         <div class="${instrTextSize} font-semibold text-blue-800 text-center">
            👆 Tap any stat to attack!
          </div>
        </div>` : '';
@@ -1312,31 +1333,31 @@ class FruitCardGameUI {
         </div>
         
         <!-- Player/Computer Info -->
-        <div class="flex items-center justify-center mb-2 bg-gray-100 rounded-lg py-1 px-2">
-          <div class="text-lg mr-2">${playerIcon}</div>
-          <div class="text-sm font-bold text-gray-700 truncate max-w-24">${playerName}</div>
+        <div class="flex items-center justify-center ${pInfoMarginBottom} bg-gray-100 rounded-lg ${pInfoPadding}">
+          <div class="${pInfoIconSize} mr-1.5">${playerIcon}</div>
+          <div class="${pInfoNameSize} font-bold text-gray-700 truncate ${pInfoMaxWidth}">${playerName}</div>
         </div>
         
         <!-- Fruit/Veggie Name and Icon Side by Side -->
-        <div class="flex items-center justify-center mb-3">
-          <div class="text-4xl mr-2">${emoji}</div>
-          <h3 class="text-lg font-bold text-gray-800 truncate max-w-32">${fruitName}</h3>
+        <div class="flex items-center justify-center ${fInfoMarginBottom}">
+          <div class="${fInfoEmojiSize} mr-1.5">${emoji}</div>
+          <h3 class="${fInfoNameSize} font-bold text-gray-800 truncate ${fInfoMaxWidth}">${fruitName}</h3>
         </div>
         
         ${instructionMessage}
-        <div class="grid grid-cols-2 gap-2 text-sm">
+        <div class="grid grid-cols-2 ${gridGap} text-sm">
           ${this.attributes.map(attr => {
             const value = fruitData.stats_per_kg[attr];
             const displayValue = value % 1 === 0 ? value : value.toFixed(1);
             const buttonClass = canClick 
-              ? `attribute-stat-btn cursor-pointer hover:bg-blue-200 hover:scale-110 transform transition-all duration-200 ${this.attributeColors[attr].replace('bg-', 'hover:bg-')} hover:text-white shadow hover:shadow-lg animate-pulse` 
+              ? `attribute-stat-btn cursor-pointer hover:bg-blue-200 hover:scale-105 transform transition-all duration-150 ${this.attributeColors[attr].replace('bg-', 'hover:bg-')} hover:text-white shadow hover:shadow-md animate-pulse` 
               : 'bg-gray-50';
             
             return `
-              <div class="${buttonClass} rounded-lg p-2 ${canClick ? 'border-2 border-blue-300 hover:border-blue-500' : ''}" 
+              <div class="${buttonClass} rounded-lg ${statBlockPadding} ${canClick ? 'border-2 border-blue-300 hover:border-blue-500' : ''}" 
                    ${canClick ? `data-attribute="${attr}" role="button"` : ''}>
-                <div class="font-semibold text-xs text-gray-600">${this.attributeNames[attr]}</div>
-                <div class="font-bold text-gray-800 text-sm">${displayValue}</div>
+                <div class="font-semibold ${statNameSize} text-gray-600">${this.attributeNames[attr]}</div>
+                <div class="font-bold text-gray-800 ${statValueSize}">${displayValue}</div>
               </div>
             `;
           }).join('')}
@@ -1346,48 +1367,73 @@ class FruitCardGameUI {
   }
   
   createHiddenCardHTML(playerType = 'computer') {
-    // Get the correct player info based on type
-    const isPlayer = playerType === 'player';
-    const playerIcon = isPlayer ? (this.userIcon || '👤') : this.currentComputer.icon;
-    const playerName = isPlayer ? (this.userName || 'You') : this.currentComputer.name;
-    
+    const isHumanPlayer = playerType === 'player';
+
+    // Get player/computer display info
+    const playerIcon = isHumanPlayer ? (this.userIcon || '👤') : this.currentComputer.icon;
+    const playerName = isHumanPlayer ? (this.userName || 'You') : this.currentComputer.name;
+
+    // Conditional styling from createCardHTML (mirrored for consistency)
+    const pInfoIconSize = isHumanPlayer ? 'text-base' : 'text-sm';
+    const pInfoNameSize = isHumanPlayer ? 'text-xs' : 'text-[0.6rem]';
+    const pInfoPadding = isHumanPlayer ? 'py-0.5 px-1' : 'py-0 px-0.5';
+    const pInfoMarginBottom = isHumanPlayer ? 'mb-1' : 'mb-0.5';
+    const pInfoMaxWidth = isHumanPlayer ? 'max-w-20' : 'max-w-16';
+
+    const fInfoEmojiSize = isHumanPlayer ? 'text-3xl' : 'text-2xl'; // For the card back emoji
+    const fInfoNameSize = isHumanPlayer ? 'text-base' : 'text-sm'; // For "Hidden Card" text
+    const fInfoMarginBottom = isHumanPlayer ? 'mb-1.5' : 'mb-1';
+    const fInfoMaxWidth = isHumanPlayer ? 'max-w-28' : 'max-w-24'; // For "Hidden Card" text
+
+    // instructionMessage equivalent for hidden card
+    const instrPadding = isHumanPlayer ? 'p-1 mb-1.5' : 'p-0.5 mb-1'; 
+    const instrTextSize = isHumanPlayer ? 'text-[0.65rem]' : 'text-[0.55rem]'; 
+
+    const gridGap = isHumanPlayer ? 'gap-1' : 'gap-0.5';
+    const statBlockPadding = isHumanPlayer ? 'p-1' : 'p-0.5';
+    const statNameSize = isHumanPlayer ? 'text-[0.65rem]' : 'text-[0.55rem]';
+    const statValueSize = isHumanPlayer ? 'text-xs' : 'text-[0.6rem]';
+
+    const hiddenMessageText = isHumanPlayer 
+        ? '🎯 Waiting for your card selection...'
+        : (this.currentPlayer === 1 && this.currentRound.player1Card && !this.currentRound.player2Card ? '🤔 Computer is choosing...' : '🔍 Select an attribute to reveal!');
+
     return `
       <div class="text-center relative">
         <!-- Hidden Power Score -->
-        <div class="absolute top-0 right-0 bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-lg">
+        <div class="absolute top-0 right-0 bg-gray-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-lg">
           🎴 ???
         </div>
         
         <!-- Player/Computer Info -->
-        <div class="flex items-center justify-center mb-2 bg-gray-100 rounded-lg py-1 px-2">
-          <div class="text-lg mr-2">${playerIcon}</div>
-          <div class="text-sm font-bold text-gray-700 truncate max-w-24">${playerName}</div>
+        <div class="flex items-center justify-center ${pInfoMarginBottom} bg-gray-100 rounded-lg ${pInfoPadding}">
+          <div class="${pInfoIconSize} mr-1.5">${playerIcon}</div>
+          <div class="${pInfoNameSize} font-bold text-gray-700 truncate ${pInfoMaxWidth}">${playerName}</div>
         </div>
         
-        <!-- Hidden Card Display -->
-        <div class="flex items-center justify-center mb-3">
-          <div class="text-4xl mr-2">🎴</div>
-          <h3 class="text-lg font-bold text-gray-500 truncate max-w-32">Hidden Card</h3>
+        <!-- Hidden Card Display (Icon and Name) -->
+        <div class="flex items-center justify-center ${fInfoMarginBottom}">
+          <div class="${fInfoEmojiSize} mr-1.5 text-gray-500">🎴</div>
+          <h3 class="${fInfoNameSize} font-bold text-gray-500 truncate ${fInfoMaxWidth}">Hidden Card</h3>
         </div>
         
-        <!-- Placeholder for instruction message (to match height) -->
-        <div class="h-0 mb-0"></div>
+        <!-- Placeholder for instruction message / Hidden message -->
+        <div class="bg-gray-50 border border-gray-200 rounded-lg ${instrPadding}">
+            <div class="${instrTextSize} font-semibold text-gray-500 text-center">
+                ${hiddenMessageText}
+            </div>
+        </div>
         
         <!-- Hidden Stats Grid -->
-        <div class="grid grid-cols-2 gap-2 text-sm">
+        <div class="grid grid-cols-2 ${gridGap} text-sm mt-1.5">
           ${this.attributes.map(attr => {
             return `
-              <div class="bg-gray-100 rounded-lg p-2">
-                <div class="font-semibold text-xs text-gray-500">${this.attributeNames[attr]}</div>
-                <div class="font-bold text-gray-400 text-sm">???</div>
+              <div class="bg-gray-100 rounded-lg ${statBlockPadding}">
+                <div class="font-semibold ${statNameSize} text-gray-500">${this.attributeNames[attr]}</div>
+                <div class="font-bold text-gray-400 ${statValueSize}">???</div>
               </div>
             `;
           }).join('')}
-        </div>
-        
-        <!-- Hidden card message -->
-        <div class="text-xs text-gray-500 mt-2 font-semibold">
-          ${isPlayer ? '🎯 Waiting for your card selection...' : '🔍 Select an attribute to reveal!'}
         </div>
       </div>
     `;
@@ -1604,7 +1650,7 @@ class FruitCardGameUI {
     } else if (this.winner === 1) {
       winnerIcon = '🎉👑';
       loserIcon = '😔🤖';
-      winnerText = `${this.userName || 'You'} Win! 🏆`;
+      winnerText = `You Win! 🏆`;
       subtitle = `Awesome job ${this.userName || 'You'}! You beat ${this.currentComputer.name}!`;
     } else {
       winnerIcon = '👑🤖';
@@ -1709,13 +1755,16 @@ class FruitCardGameUI {
       <!-- Icon Selection -->
       <div class="mb-6">
         <label class="block text-sm font-bold text-gray-700 mb-3">Choose Your Avatar:</label>
-        <div class="grid grid-cols-4 sm:grid-cols-6 gap-3 justify-items-center">
-          ${this.userIconOptions.map(icon => `
-            <button class="user-icon-edit-btn ${this.userIcon === icon ? 'bg-blue-100 border-blue-500' : 'bg-white border-blue-300'} hover:bg-blue-50 border-2 hover:border-blue-500 rounded-lg p-3 text-center hover:scale-110 transform transition shadow hover:shadow-lg" data-icon="${icon}">
-              <div class="text-2xl">${icon}</div>
-            </button>
-          `).join('')}
+        <div class="overflow-x-auto scrollbar-hide">
+          <div class="grid grid-rows-2 grid-flow-col auto-cols-max gap-3 justify-start pb-2" style="grid-template-rows: repeat(2, minmax(0, 1fr));">
+            ${this.userIconOptions.map(icon => `
+              <button class="user-icon-edit-btn ${this.userIcon === icon ? 'bg-blue-100 border-blue-500' : 'bg-white border-blue-300'} hover:bg-blue-50 border-2 hover:border-blue-500 rounded-lg p-3 text-center hover:scale-110 transform transition shadow hover:shadow-lg min-w-[60px]" data-icon="${icon}">
+                <div class="text-2xl">${icon}</div>
+              </button>
+            `).join('')}
+          </div>
         </div>
+        <p class="text-xs text-gray-500 mt-2 text-center">← Scroll horizontally to see more avatars →</p>
       </div>
       
       <!-- Action Buttons -->

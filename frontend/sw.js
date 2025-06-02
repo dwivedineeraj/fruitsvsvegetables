@@ -4,8 +4,8 @@ const urlsToCache = [
   './index.html',
   './game-ui.js',
   './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
+  './icons/icon-192.jpg',
+  './icons/icon-512.jpg',
   'https://cdn.tailwindcss.com'
 ];
 
@@ -101,8 +101,8 @@ self.addEventListener('push', event => {
   
   const options = {
     body: event.data ? event.data.text() : 'New nutrition challenge available!',
-    icon: './icons/icon-192.png',
-    badge: './icons/icon-72.png',
+    icon: './icons/icon-192.jpg',
+    badge: './icons/icon-72.jpg',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -112,12 +112,12 @@ self.addEventListener('push', event => {
       {
         action: 'play',
         title: 'Play Now',
-        icon: './icons/icon-72.png'
+        icon: './icons/icon-72.jpg'
       },
       {
         action: 'close',
         title: 'Close',
-        icon: './icons/icon-72.png'
+        icon: './icons/icon-72.jpg'
       }
     ]
   };

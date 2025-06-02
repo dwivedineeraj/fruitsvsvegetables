@@ -49,6 +49,11 @@ if ('serviceWorker' in navigator) {
 // PWA Installation Prompt
 let deferredPrompt;
 
+// Function to detect if device is mobile
+function isMobileDevice() {
+    return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
     console.log('PWA install prompt triggered');
     // Prevent Chrome 67 and earlier from automatically showing the prompt
@@ -56,13 +61,15 @@ window.addEventListener('beforeinstallprompt', (e) => {
     // Stash the event so it can be triggered later
     deferredPrompt = e;
     
-    // Show install button in header if not already installed
-    showInstallButton();
+    // Show install button only on mobile devices if not already installed
+    if (isMobileDevice()) {
+        showInstallButton();
+    }
 });
 
 function showInstallButton() {
     // Show the existing install button instead of creating a new one
-    if (deferredPrompt) {
+    if (deferredPrompt && isMobileDevice()) {
         const installButton = document.getElementById('installBtn');
         if (installButton) {
             installButton.style.display = 'flex';
@@ -101,8 +108,25 @@ window.addEventListener('appinstalled', (evt) => {
     }
 });
 
-// Check if already running as PWA
+// Check if already running as PWA and hide install button
 if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
     console.log('App is running as PWA');
-    // Could add PWA-specific features here
-} 
+    const installButton = document.getElementById('installBtn');
+    if (installButton) {
+        installButton.style.display = 'none';
+    }
+}
+
+// Additional mobile-specific PWA features
+document.addEventListener('DOMContentLoaded', function() {
+    // Only show install button on mobile if PWA not already installed
+    if (isMobileDevice() && !window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
+        // Check if install button should be shown based on browser support
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            const installButton = document.getElementById('installBtn');
+            if (installButton && deferredPrompt) {
+                installButton.style.display = 'flex';
+            }
+        }
+    }
+}); 
