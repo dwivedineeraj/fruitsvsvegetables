@@ -655,7 +655,7 @@ class FruitCardGameUI {
       <!-- Icon Selection -->
       <div class="mb-6">
         <label class="block text-base font-bold text-gray-700 mb-3 fun-font">Pick Your Avatar:</label>
-        <div class="grid grid-cols-6 gap-3">
+        <div class="grid grid-cols-4 sm:grid-cols-6 gap-3 justify-items-center">
           ${this.userIconOptions.map(icon => `
             <button class="user-icon-btn ${this.userIcon === icon ? 'bg-yellow-200 border-yellow-500 scale-110' : 'bg-white border-purple-300'} hover:bg-yellow-100 border-4 hover:border-yellow-500 rounded-2xl p-3 text-center hover:scale-125 transform transition shadow-lg hover:shadow-xl btn-bounce" data-icon="${icon}">
               <div class="text-2xl">${icon}</div>
@@ -919,7 +919,7 @@ class FruitCardGameUI {
     const playerTeamNames = playerTeamItems.map(item => item.name);
     
     // Filter available items to only include player's team
-    const availableFromTeam = playerTeamNames.filter(name => !this.usedFruits.includes(name));
+    let availableFromTeam = playerTeamNames.filter(name => !this.usedFruits.includes(name));
     
     if (availableFromTeam.length === 0) {
       // No more items available from player's team - reset used items
@@ -1087,6 +1087,7 @@ class FruitCardGameUI {
     this.cardSelectionMode = false;
     document.getElementById('fruitSelectionModal').style.display = 'none';
     
+    // Show cards - player card revealed, computer card face down
     this.displayCards();
     this.updateDisplay();
     
@@ -1153,20 +1154,28 @@ class FruitCardGameUI {
     
     this.currentRound.chosenAttribute = attribute;
     
-    // For tiebreaker, handle both player and computer choices
-    if (this.isTiebreaker && !this.tiebreakerChoices) {
-      if (this.currentPlayer === 1) {
-        // Player chose, now get computer's choice
-        const computerChoice = this.getComputerChoice();
-        this.tiebreakerChoices = {
-          player1: attribute,
-          player2: computerChoice
-        };
-        this.resolveTiebreaker();
+    // Immediately reveal the computer's card when attribute is selected
+    const player2CardElement = document.getElementById('player2Card');
+    const fruit2Data = this.getFruitData(this.currentRound.player2Card);
+    this.revealCardWithAnimation(player2CardElement, fruit2Data, this.currentRound.player2Card, 2, 'computer');
+    
+    // Add a brief delay before resolving to let the card reveal animation play
+    setTimeout(() => {
+      // For tiebreaker, handle both player and computer choices
+      if (this.isTiebreaker && !this.tiebreakerChoices) {
+        if (this.currentPlayer === 1) {
+          // Player chose, now get computer's choice
+          const computerChoice = this.getComputerChoice();
+          this.tiebreakerChoices = {
+            player1: attribute,
+            player2: computerChoice
+          };
+          this.resolveTiebreaker();
+        }
+      } else {
+        this.resolveRound();
       }
-    } else {
-      this.resolveRound();
-    }
+    }, 500); // Half second delay to let the card reveal
   }
   
   resolveRound() {
@@ -1263,15 +1272,15 @@ class FruitCardGameUI {
   displayCardsWithResult() {
     const result = this.currentRound.result;
     
-    // Update player 1 card with result highlighting
+    // Update player 1 card with result highlighting and animation
     const player1CardElement = document.getElementById('player1Card');
     const fruit1Data = this.getFruitData(this.currentRound.player1Card);
-    player1CardElement.innerHTML = this.createCardHTMLWithResult(fruit1Data, this.currentRound.player1Card, 1, result);
+    this.showCardWithResultAnimation(player1CardElement, fruit1Data, this.currentRound.player1Card, 1, result);
     
-    // Update player 2 card with result highlighting
+    // Update player 2 card with result highlighting and animation
     const player2CardElement = document.getElementById('player2Card');
     const fruit2Data = this.getFruitData(this.currentRound.player2Card);
-    player2CardElement.innerHTML = this.createCardHTMLWithResult(fruit2Data, this.currentRound.player2Card, 2, result);
+    this.showCardWithResultAnimation(player2CardElement, fruit2Data, this.currentRound.player2Card, 2, result);
   }
   
   createCardHTML(fruitData, fruitName, playerNumber) {
@@ -1336,18 +1345,23 @@ class FruitCardGameUI {
     `;
   }
   
-  createHiddenCardHTML() {
+  createHiddenCardHTML(playerType = 'computer') {
+    // Get the correct player info based on type
+    const isPlayer = playerType === 'player';
+    const playerIcon = isPlayer ? (this.userIcon || '👤') : this.currentComputer.icon;
+    const playerName = isPlayer ? (this.userName || 'You') : this.currentComputer.name;
+    
     return `
       <div class="text-center relative">
         <!-- Hidden Power Score -->
-        <div class="absolute top-0 right-0 bg-gray-400 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-lg">
-          ? ???
+        <div class="absolute top-0 right-0 bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded-bl-lg rounded-tr-lg shadow-lg">
+          🎴 ???
         </div>
         
         <!-- Player/Computer Info -->
         <div class="flex items-center justify-center mb-2 bg-gray-100 rounded-lg py-1 px-2">
-          <div class="text-lg mr-2">${this.currentComputer.icon}</div>
-          <div class="text-sm font-bold text-gray-700 truncate max-w-24">${this.currentComputer.name}</div>
+          <div class="text-lg mr-2">${playerIcon}</div>
+          <div class="text-sm font-bold text-gray-700 truncate max-w-24">${playerName}</div>
         </div>
         
         <!-- Hidden Card Display -->
@@ -1356,9 +1370,24 @@ class FruitCardGameUI {
           <h3 class="text-lg font-bold text-gray-500 truncate max-w-32">Hidden Card</h3>
         </div>
         
-        <div class="bg-gray-200 rounded-lg p-3">
-          <div class="text-gray-500 font-semibold text-base">?</div>
-          <div class="text-xs text-gray-400 mt-1">Opponent's card is hidden!</div>
+        <!-- Placeholder for instruction message (to match height) -->
+        <div class="h-0 mb-0"></div>
+        
+        <!-- Hidden Stats Grid -->
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          ${this.attributes.map(attr => {
+            return `
+              <div class="bg-gray-100 rounded-lg p-2">
+                <div class="font-semibold text-xs text-gray-500">${this.attributeNames[attr]}</div>
+                <div class="font-bold text-gray-400 text-sm">???</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        
+        <!-- Hidden card message -->
+        <div class="text-xs text-gray-500 mt-2 font-semibold">
+          ${isPlayer ? '🎯 Waiting for your card selection...' : '🔍 Select an attribute to reveal!'}
         </div>
       </div>
     `;
@@ -1500,24 +1529,28 @@ class FruitCardGameUI {
   }
   
   displayCards() {
-    // Update player 1 card - always show if it's their turn or in result mode
+    // Update player 1 card - only show if it's their turn or in result mode
     const player1CardElement = document.getElementById('player1Card');
     const fruit1Data = this.getFruitData(this.currentRound.player1Card);
     
-    if (this.currentPlayer === 1 || this.currentRound.result) {
-      player1CardElement.innerHTML = this.createCardHTML(fruit1Data, this.currentRound.player1Card, 1);
+    if ((this.currentPlayer === 1 && this.currentRound.player1Card) || this.currentRound.result) {
+      // Use animation for revealing cards
+      this.revealCardWithAnimation(player1CardElement, fruit1Data, this.currentRound.player1Card, 1, 'player');
     } else {
-      player1CardElement.innerHTML = this.createHiddenCardHTML();
+      // Use animation for hidden cards - pass 'player' type for player 1
+      this.showHiddenCardWithAnimation(player1CardElement, 'player');
     }
     
-    // Update player 2 card - always show if it's their turn or in result mode
+    // Update player 2 card - ONLY show in result mode, keep hidden until attribute is selected
     const player2CardElement = document.getElementById('player2Card');
     const fruit2Data = this.getFruitData(this.currentRound.player2Card);
     
-    if (this.currentPlayer === 2 || this.currentRound.result) {
-      player2CardElement.innerHTML = this.createCardHTML(fruit2Data, this.currentRound.player2Card, 2);
+    if (this.currentRound.result) {
+      // Only reveal computer card after the round result is available
+      this.revealCardWithAnimation(player2CardElement, fruit2Data, this.currentRound.player2Card, 2, 'computer');
     } else {
-      player2CardElement.innerHTML = this.createHiddenCardHTML();
+      // Keep computer card hidden until attribute is selected - pass 'computer' type for player 2
+      this.showHiddenCardWithAnimation(player2CardElement, 'computer');
     }
     
     // Hide modals
@@ -1584,7 +1617,7 @@ class FruitCardGameUI {
     const modalContent = modal.querySelector('.bg-white');
     modalContent.innerHTML = `
       <div class="text-6xl md:text-7xl mb-4 animate-bounce">${winnerIcon}</div>
-      <h2 class="text-2xl md:text-3xl font-bold mb-2 text-purple-800 fun-font">${winnerText}</h2>
+      <h2 class="text-2xl md:text-3xl w-100 font-bold mb-2 text-purple-800 fun-font">${winnerText}</h2>
       <p class="text-purple-600 mb-2 text-base md:text-lg bubble-font">${subtitle}</p>
       ${loserIcon ? `<div class="text-3xl mb-4">${loserIcon}</div>` : ''}
       <div class="bg-gradient-to-r from-yellow-100 to-pink-100 rounded-2xl p-4 mb-4 border-4 border-yellow-300">
@@ -1676,7 +1709,7 @@ class FruitCardGameUI {
       <!-- Icon Selection -->
       <div class="mb-6">
         <label class="block text-sm font-bold text-gray-700 mb-3">Choose Your Avatar:</label>
-        <div class="grid grid-cols-6 gap-3">
+        <div class="grid grid-cols-4 sm:grid-cols-6 gap-3 justify-items-center">
           ${this.userIconOptions.map(icon => `
             <button class="user-icon-edit-btn ${this.userIcon === icon ? 'bg-blue-100 border-blue-500' : 'bg-white border-blue-300'} hover:bg-blue-50 border-2 hover:border-blue-500 rounded-lg p-3 text-center hover:scale-110 transform transition shadow hover:shadow-lg" data-icon="${icon}">
               <div class="text-2xl">${icon}</div>
@@ -1792,6 +1825,44 @@ class FruitCardGameUI {
     
     // Update the team display now that we're back in game context
     this.updateTeamDisplay();
+  }
+
+  // Animation methods for card reveals
+  revealCardWithAnimation(cardElement, fruitData, fruitName, playerNumber, playerType) {
+    // Simple version without animation - just set innerHTML
+    cardElement.innerHTML = this.createCardHTML(fruitData, fruitName, playerNumber);
+  }
+  
+  showHiddenCardWithAnimation(cardElement, playerType) {
+    // Simple version without animation - just set innerHTML
+    cardElement.innerHTML = this.createHiddenCardHTML(playerType);
+  }
+
+  showCardWithResultAnimation(cardElement, fruitData, fruitName, playerNumber, result) {
+    // Simple version without animation - just set innerHTML
+    // Clear existing animations
+    cardElement.className = cardElement.className.replace(/card-\w+(-\w+)*/g, '');
+    
+    // Update card content with result
+    cardElement.innerHTML = this.createCardHTMLWithResult(fruitData, fruitName, playerNumber, result);
+    
+    // Add appropriate result animation
+    if (result.winner === playerNumber) {
+      cardElement.classList.add('card-win', 'card-sparkle');
+    } else if (result.winner === 0) {
+      cardElement.classList.add('card-tie');
+    } else {
+      cardElement.classList.add('card-lose');
+    }
+    
+    // Clean up animation classes after animation (slower timing)
+    setTimeout(() => {
+      cardElement.classList.remove('card-win', 'card-lose', 'card-tie');
+      // Keep sparkle for winners longer
+      if (result.winner !== playerNumber) {
+        cardElement.classList.remove('card-sparkle');
+      }
+    }, 2000);
   }
 }
 

@@ -2,25 +2,6 @@
 
 // Mobile touch event improvements
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile debug info (remove after testing)
-    if (window.innerWidth <= 768) {
-        console.log('Mobile device detected:', {
-            width: window.innerWidth,
-            height: window.innerHeight,
-            userAgent: navigator.userAgent,
-            touchSupport: 'ontouchstart' in window
-        });
-        
-        // Add visible debug info for mobile
-        const debugDiv = document.createElement('div');
-        debugDiv.className = 'fixed top-0 left-0 bg-red-500 bg-opacity-80 text-white p-2 text-xs z-[9999] max-w-[200px] rounded-br-lg';
-        debugDiv.innerHTML = `Mobile: ${window.innerWidth}x${window.innerHeight}<br>Touch: ${('ontouchstart' in window) ? 'Yes' : 'No'}`;
-        document.body.appendChild(debugDiv);
-        
-        // Remove debug after 5 seconds
-        setTimeout(() => debugDiv.remove(), 5000);
-    }
-    
     // Add text-base class to all text inputs to prevent zoom on focus (iOS)
     document.querySelectorAll('input[type="text"]').forEach(input => {
         input.classList.add('text-base', 'min-h-[44px]');
