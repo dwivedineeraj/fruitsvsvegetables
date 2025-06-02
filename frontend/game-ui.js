@@ -544,6 +544,12 @@ class FruitCardGameUI {
     
     this.currentComputer = this.getRandomComputer();
     
+    // Touch state for carousel swipe
+    this.touchStartX = 0;
+    this.touchEndX = 0;
+    this.isSwipingOnCarousel = false; // More specific name
+    this.swipeThreshold = 50; // Minimum pixels to be considered a swipe
+
     this.updateLoadingProgress(70, "Loading player options...");
     await this.delay(500);
     
@@ -572,6 +578,16 @@ class FruitCardGameUI {
     // Hide loading screen and start game
     this.hideLoadingScreen();
     this.resetGame(); // Automatically start the game
+  }
+  
+  // Utility function to shuffle an array (Fisher-Yates shuffle)
+  shuffleArray(array) {
+    const shuffled = [...array]; // Create a copy to avoid mutating original
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
   }
   
   updateLoadingProgress(percentage, message) {
@@ -916,192 +932,357 @@ class FruitCardGameUI {
   showCardSelection() {
     this.cardSelectionMode = true;
     const fruitSelectionContent = document.getElementById('fruitSelectionContent');
-    
-    // Get items from player's team only
+
     const playerTeamItems = fruitData.filter(item => item.type === this.playerTeam);
-    const playerTeamNames = playerTeamItems.map(item => item.name);
+    // This logic for available/used/locked items within the team remains important for the "Select" button
+    this.currentTeamItemsData = playerTeamItems.map(item => ({
+        ...item,
+        isUsed: this.usedFruits.includes(item.name),
+    }));
     
-    // Filter available items to only include player's team
-    let availableFromTeam = playerTeamNames.filter(name => !this.usedFruits.includes(name));
-    
-    if (availableFromTeam.length === 0) {
-      // No more items available from player's team - reset used items
-      this.usedFruits = [];
-      availableFromTeam = playerTeamNames;
+    // Shuffle available items logic to pick 3 active ones - we might adapt this or simplify for carousel
+    let availableForSelection = this.currentTeamItemsData.filter(item => !item.isUsed);
+    if (availableForSelection.length === 0) { // All team items used, reset for the team
+        this.usedFruits = this.usedFruits.filter(usedName => !playerTeamItems.find(pi => pi.name === usedName));
+        this.currentTeamItemsData.forEach(item => item.isUsed = false);
+        availableForSelection = [...this.currentTeamItemsData];
     }
     
-    // Separate used and unused items from player's team
-    const usedItems = playerTeamItems.filter(item => this.usedFruits.includes(item.name));
-    const availableItems = playerTeamItems.filter(item => !this.usedFruits.includes(item.name));
-    
-    // RANDOMIZE the available items and show only 3 as active
-    const shuffledAvailable = this.shuffleArray([...availableItems]);
-    const activeItems = shuffledAvailable.slice(0, 3);
-    const lockedItems = shuffledAvailable.slice(3);
-    
-    // Order: Active items first, then locked items, then used items at the end
-    const teamItems = [...activeItems, ...lockedItems, ...usedItems];
-    
+    // For the carousel, we'll cycle through ALL items of the player's team
+    // The 'isUsed' and initial 'isAvailable' (first 3 non-used) helps determine selectability
+    // We need to ensure this.currentTeamItemsData has a consistent order for the carousel
+    // Let's sort by: 1. Not used & available (first 3), 2. Not used & locked, 3. Used
+    const availableActive = this.shuffleArray([...availableForSelection]).slice(0, 3);
+    const availableActiveNames = availableActive.map(i => i.name);
+
+    this.currentTeamItemsData.forEach(item => {
+        item.isCurrentlyAvailableToPick = availableActiveNames.includes(item.name) && !item.isUsed;
+        item.isLocked = !item.isUsed && !item.isCurrentlyAvailableToPick;
+    });
+
+    this.carouselPlayerTeamItems = [...this.currentTeamItemsData].sort((a, b) => {
+        if (a.isCurrentlyAvailableToPick && !b.isCurrentlyAvailableToPick) return -1;
+        if (!a.isCurrentlyAvailableToPick && b.isCurrentlyAvailableToPick) return 1;
+        if (a.isLocked && !b.isLocked) return -1;
+        if (!a.isLocked && b.isLocked) return 1;
+        if (a.isUsed && !b.isUsed) return 1; // Used items at the end
+        if (!a.isUsed && b.isUsed) return -1;
+        return 0; // Maintain original order or sort by name if needed
+    });
+
+    this.carouselCurrentIndex = 0; // Start with the first item in the sorted list
+
     const teamIcon = this.playerTeam === 'fruit' ? '🍎' : '🥬';
     const teamName = this.playerTeam === 'fruit' ? 'Fruits' : 'Vegetables';
     const teamColor = this.playerTeam === 'fruit' ? 'blue' : 'green';
-    
-    const selectionTitle = this.isTiebreaker 
-      ? `<h2 class="text-xl font-bold text-red-600 mb-2">⚡ SUDDEN DEATH! ⚡</h2>
-         <p class="text-sm text-gray-700 mb-3">Choose your ${this.playerTeam} for the final battle!</p>`
-      : `<h2 class="text-xl font-bold text-${teamColor}-600 mb-2">${teamIcon} Choose Your ${teamName} ${teamIcon}</h2>
-         <p class="text-sm text-gray-700 mb-3">Pick your fighter (3 available):</p>`;
-    
+
+    const selectionTitle = this.isTiebreaker
+      ? `<h2 class="text-xl font-bold text-red-600 mb-1 fun-font">⚡ SUDDEN DEATH! ⚡</h2>
+         <p class="text-xs text-gray-700 mb-2">Choose your ${this.playerTeam} for the final battle!</p>`
+      : `<h2 class="text-xl font-bold text-${teamColor}-600 mb-1 fun-font">${teamIcon} Choose Your ${teamName} ${teamIcon}</h2>
+         <p class="text-xs text-gray-700 mb-2">Use arrows or click sides to browse. Pick your fighter!</p>`;
+
     fruitSelectionContent.innerHTML = `
-      <div class="text-center mb-4">
+      <div class="text-center mb-3">
         ${selectionTitle}
       </div>
       
-      <!-- Player's Team Section -->
-      <div class="mb-4">
-        <div class="flex overflow-x-auto scrollbar-hide gap-4 pb-4 px-2" 
-             style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
-          ${this.createItemCards(teamItems, activeItems.map(item => item.name))}
+      <div id="cardCarouselContainer" class="relative flex items-center justify-center h-72 sm:h-80 md:h-96 select-none">
+        <button id="carouselPrevBtn" class="absolute left-0 z-20 p-2 bg-gray-200 hover:bg-gray-300 rounded-full shadow-md carousel-arrow">
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        
+        <div id="cardCarouselStage" class="relative w-full h-full flex items-center justify-center overflow-hidden">
+          <!-- Cards will be rendered here by JavaScript -->
         </div>
+        
+        <button id="carouselNextBtn" class="absolute right-0 z-20 p-2 bg-gray-200 hover:bg-gray-300 rounded-full shadow-md carousel-arrow">
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>
       </div>
       
-      <!-- Team Info -->
+      <div class="text-center mt-4">
+        <button id="carouselSelectBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg text-base shadow-lg transform transition hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed fun-font">
+          ✨ Select This Card ✨
+        </button>
+      </div>
+      
       <div class="flex justify-center mt-3">
         <div class="text-xs text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
           ${this.currentComputer.name} chooses from both sides • ${teamIcon} vs 🤖
         </div>
       </div>
     `;
-    
+
     document.getElementById('fruitSelectionModal').style.display = 'flex';
     
-    // Add click handlers for card selection (only for available items)
-    document.querySelectorAll('.card-selection-btn').forEach(btn => {
-      if (!btn.disabled) {
-        btn.addEventListener('click', (e) => {
-          const itemName = e.target.closest('.card-selection-btn').dataset.fruit;
-          this.selectPlayerCard(itemName);
-        });
-      }
-    });
+    // Setup Carousel
+    this.carouselPrevBtn = document.getElementById('carouselPrevBtn');
+    this.carouselNextBtn = document.getElementById('carouselNextBtn');
+    this.carouselSelectBtn = document.getElementById('carouselSelectBtn');
+    this.cardCarouselStage = document.getElementById('cardCarouselStage');
+
+    this.carouselPrevBtn.addEventListener('click', () => this.navigateCarousel(-1));
+    this.carouselNextBtn.addEventListener('click', () => this.navigateCarousel(1));
+    this.carouselSelectBtn.addEventListener('click', () => this.selectFocusedCardFromCarousel());
+
+    // Add touch event listeners for swipe on the carousel stage
+    this.cardCarouselStage.addEventListener('touchstart', (e) => this.handleCarouselTouchStart(e), { passive: true }); // passive:true if not preventing default scroll
+    this.cardCarouselStage.addEventListener('touchmove', (e) => this.handleCarouselTouchMove(e), { passive: false }); // passive:false if we want to prevent scroll during swipe
+    this.cardCarouselStage.addEventListener('touchend', (e) => this.handleCarouselTouchEnd(e));
+
+    this.renderCarouselView(); // Initial render
   }
-  
-  // Utility function to shuffle an array (Fisher-Yates shuffle)
-  shuffleArray(array) {
-    const shuffled = [...array]; // Create a copy to avoid mutating original
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+
+  handleCarouselTouchStart(event) {
+    // If touch target is one of the cards that already has a click listener (prev/next), 
+    // let the click listener handle it and don't start a swipe.
+    if (event.target.closest('.carousel-card-wrapper[style*="cursor: pointer"]')) {
+        this.isSwipingOnCarousel = false;
+        return;
     }
-    return shuffled;
+    this.touchStartX = event.touches[0].clientX;
+    this.isSwipingOnCarousel = true;
+    // We don't set touchEndX here, only on move/end
+  }
+
+  handleCarouselTouchMove(event) {
+    if (!this.isSwipingOnCarousel) return;
+    this.touchEndX = event.touches[0].clientX;
+    // Prevent vertical scroll if a horizontal swipe is significant enough
+    if (Math.abs(this.touchStartX - this.touchEndX) > this.swipeThreshold / 2) {
+        event.preventDefault(); 
+    }
+  }
+
+  handleCarouselTouchEnd(event) {
+    if (!this.isSwipingOnCarousel || this.touchEndX === 0) { // touchEndX might be 0 if no move registered
+        this.isSwipingOnCarousel = false;
+        return;
+    }
+
+    const swipeDistance = this.touchEndX - this.touchStartX;
+
+    if (Math.abs(swipeDistance) > this.swipeThreshold) {
+        if (swipeDistance < 0) {
+            // Swiped left (next card)
+            this.navigateCarousel(1);
+        } else {
+            // Swiped right (previous card)
+            this.navigateCarousel(-1);
+        }
+    }
+    // Reset for next swipe
+    this.isSwipingOnCarousel = false;
+    this.touchStartX = 0;
+    this.touchEndX = 0;
+  }
+
+  navigateCarousel(direction) {
+    if (!this.carouselPlayerTeamItems || this.carouselPlayerTeamItems.length === 0) return;
+    
+    this.carouselCurrentIndex += direction;
+    
+    if (this.carouselCurrentIndex < 0) {
+      this.carouselCurrentIndex = this.carouselPlayerTeamItems.length - 1; // Wrap around
+    } else if (this.carouselCurrentIndex >= this.carouselPlayerTeamItems.length) {
+      this.carouselCurrentIndex = 0; // Wrap around
+    }
+    this.renderCarouselView();
+  }
+
+  renderCarouselView() {
+    if (!this.cardCarouselStage || !this.carouselPlayerTeamItems || this.carouselPlayerTeamItems.length === 0) {
+        if(this.cardCarouselStage) this.cardCarouselStage.innerHTML = '<p class="text-gray-500">No items to display.</p>';
+        if(this.carouselSelectBtn) this.carouselSelectBtn.disabled = true;
+        return;
+    }
+
+    this.cardCarouselStage.innerHTML = ''; // Clear previous cards
+
+    const totalItems = this.carouselPlayerTeamItems.length;
+    const focusedItemData = this.carouselPlayerTeamItems[this.carouselCurrentIndex];
+    
+    // Indices for prev/next
+    const prevIndex = (this.carouselCurrentIndex - 1 + totalItems) % totalItems;
+    const nextIndex = (this.carouselCurrentIndex + 1) % totalItems;
+
+    // Create and display previous, current, and next cards
+    // Only show prev/next if there are enough items (at least 2 for prev/next to be different from current)
+    const itemsToDisplay = [];
+    if (totalItems === 1) {
+        itemsToDisplay.push({ data: focusedItemData, position: 'focused', index: this.carouselCurrentIndex });
+    } else if (totalItems === 2) {
+        // Show current and one adjacent (let's say 'next' one which could be the 'previous' visually if we position it so)
+        itemsToDisplay.push({ data: focusedItemData, position: 'focused', index: this.carouselCurrentIndex });
+        const otherItemData = this.carouselPlayerTeamItems[nextIndex]; // 'nextIndex' will be the other item
+        itemsToDisplay.push({ data: otherItemData, position: 'next', index: nextIndex });
+    } else { // 3 or more items
+        const prevItemData = this.carouselPlayerTeamItems[prevIndex];
+        itemsToDisplay.push({ data: prevItemData, position: 'prev', index: prevIndex });
+        itemsToDisplay.push({ data: focusedItemData, position: 'focused', index: this.carouselCurrentIndex });
+        const nextItemData = this.carouselPlayerTeamItems[nextIndex];
+        itemsToDisplay.push({ data: nextItemData, position: 'next', index: nextIndex });
+    }
+    
+    itemsToDisplay.forEach(itemWithPos => {
+        const cardElement = this.createSingleCardElementForCarousel(itemWithPos.data, itemWithPos.position);
+        // Add click listener to prev/next cards to focus them
+        if (itemWithPos.position === 'prev' || itemWithPos.position === 'next') {
+            cardElement.addEventListener('click', () => {
+                this.carouselCurrentIndex = itemWithPos.index;
+                this.renderCarouselView();
+            });
+        }
+        this.cardCarouselStage.appendChild(cardElement);
+    });
+
+    // Update Select Button state
+    const canSelectFocused = focusedItemData.isCurrentlyAvailableToPick && !focusedItemData.isUsed;
+    this.carouselSelectBtn.disabled = !canSelectFocused;
+    this.carouselSelectBtn.textContent = canSelectFocused ? '✨ Select This Card ✨' : (focusedItemData.isUsed ? 'Already Used' : 'Locked');
+     if (focusedItemData.isUsed) {
+        this.carouselSelectBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+        this.carouselSelectBtn.classList.add('bg-gray-400');
+    } else if (!canSelectFocused) { // Locked
+        this.carouselSelectBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+        this.carouselSelectBtn.classList.add('bg-yellow-500'); // Or some other color for locked
+    } else { // Can select
+        this.carouselSelectBtn.classList.remove('bg-gray-400', 'bg-yellow-500');
+        this.carouselSelectBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+    }
   }
   
-  createItemCards(items, availableItems) {
-    return items.map(itemData => {
-      const itemName = itemData.name;
-      const emoji = fruitEmojis[itemName] || '🍎';
-      const isUsed = this.usedFruits.includes(itemName);
-      const isAvailable = !isUsed && availableItems.includes(itemName);
-      const isLocked = !isUsed && !isAvailable; // Not used and not in available list = locked
-      const powerScore = itemData.powerScore || 0;
-      const typeIcon = itemData.type === 'fruit' ? '🍎' : '🥬';
-      
-      let buttonClass, textClass;
-      
-      if (isUsed) {
-        // Used items - gray style
-        buttonClass = 'bg-gray-100 border-2 border-gray-300 opacity-60';
-        textClass = 'text-gray-400';
-      } else if (isLocked) {
-        // Locked items - darker gray
-        buttonClass = 'bg-gray-200 border-2 border-gray-400 opacity-70';
-        textClass = 'text-gray-500';
-      } else if (this.isTiebreaker) {
-        // Available items in tiebreaker - red theme
-        buttonClass = 'bg-red-50 hover:bg-red-100 border-2 border-red-300 hover:border-red-500 hover:scale-105 transform transition shadow-lg hover:shadow-xl';
-        textClass = 'text-gray-800';
-      } else {
-        // Available items in normal game - type-based theme
-        const themeColor = itemData.type === 'fruit' ? 'blue' : 'green';
-        buttonClass = `bg-white hover:bg-${themeColor}-50 border-2 border-${themeColor}-300 hover:border-${themeColor}-500 hover:scale-105 transform transition shadow-lg hover:shadow-xl`;
-        textClass = 'text-gray-800';
-      }
-      
-      return `
-        <button 
-          class="card-selection-btn ${buttonClass} rounded-xl p-4 flex-shrink-0 w-36 ${isAvailable ? 'cursor-pointer' : 'cursor-not-allowed'} relative"
-          data-fruit="${itemName}"
-          ${!isAvailable ? 'disabled' : ''}
-          style="scroll-snap-align: center;"
-        >
-          <!-- Power Score Badge -->
-          <div class="absolute top-2 right-2 ${isUsed ? 'bg-gray-400' : isLocked ? 'bg-gray-500' : (itemData.type === 'fruit' ? 'bg-gradient-to-r from-blue-500 to-purple-500' : 'bg-gradient-to-r from-green-500 to-teal-500')} text-white text-xs font-bold px-2 py-1 rounded-full shadow">
-            ${typeIcon} ${powerScore}
-          </div>
-          
-          <div class="flex flex-col items-center h-full">
-            <!-- Item emoji and name -->
-            <div class="text-3xl mb-2 ${(isUsed || isLocked) ? 'grayscale' : ''}">${emoji}</div>
-            <h3 class="text-xs font-bold ${textClass} text-center leading-tight mb-3">${itemName}</h3>
-            
-            <!-- Attribute preview -->
-            <div class="w-full space-y-1">
-              ${this.attributes.map(attr => {
-                const value = itemData.stats_per_kg[attr];
-                const displayValue = value % 1 === 0 ? value : value.toFixed(1);
-                const shortLabel = this.attributeNames[attr].split(' ')[0];
-                const colorClass = this.attributeColors[attr];
-                
-                return `
-                  <div class="flex justify-between items-center text-xs bg-gray-50 rounded px-2 py-1">
-                    <span class="font-medium text-gray-600">${shortLabel}</span>
-                    <span class="font-bold ${textClass} ${colorClass.replace('bg-', 'text-')} px-1 rounded">${displayValue}</span>
-                  </div>
-                `;
-              }).join('')}
+  createSingleCardElementForCarousel(itemData, position) {
+    // This function is responsible for creating the DOM element for a single card
+    // It will use logic similar to the old createItemCards but for one item
+    // and apply styles based on 'position' (focused, prev, next)
+    const cardWrapper = document.createElement('div');
+    cardWrapper.className = 'carousel-card-wrapper absolute transition-all duration-500 ease-in-out';
+
+    const itemName = itemData.name;
+    const emoji = fruitEmojis[itemName] || (itemData.type === 'fruit' ? '🍎' : '🥬');
+    const powerScore = itemData.powerScore || 0;
+    const typeIcon = itemData.type === 'fruit' ? '🍎' : '🥬';
+    
+    let baseCardClasses = 'rounded-xl p-3 flex-shrink-0 w-40 sm:w-44 md:w-48 h-auto shadow-lg relative border-2 overflow-hidden'; // Base width for focused
+    let textClasses = 'text-gray-800';
+    let specificCardStyles = ''; // For transform, opacity, z-index
+
+    if (itemData.isUsed) {
+        baseCardClasses += ' bg-gray-100 border-gray-300 opacity-60 grayscale';
+        textClasses = 'text-gray-400';
+    } else if (itemData.isLocked) {
+        baseCardClasses += ' bg-gray-200 border-gray-400 opacity-70'; // Darker gray, no grayscale
+        textClasses = 'text-gray-500';
+    } else { // Available or an active choice
+         const themeColor = itemData.type === 'fruit' ? 'blue' : 'green';
+         baseCardClasses += ` bg-white border-${themeColor}-400`;
+    }
+
+    switch(position) {
+        case 'focused':
+            specificCardStyles = 'transform: translateX(0%) scale(1); opacity: 1; z-index: 20;';
+            // Make focused card slightly larger if desired
+            // baseCardClasses = 'rounded-xl p-4 flex-shrink-0 w-48 sm:w-52 md:w-56 h-auto shadow-xl relative border-4 overflow-hidden';
+            break;
+        case 'prev':
+            specificCardStyles = 'transform: translateX(-60%) scale(0.7) rotateY(30deg); opacity: 0.6; z-index: 10; cursor: pointer;';
+            baseCardClasses += ' border-gray-300'; // Less prominent border for adjacent
+            break;
+        case 'next':
+            specificCardStyles = 'transform: translateX(60%) scale(0.7) rotateY(-30deg); opacity: 0.6; z-index: 10; cursor: pointer;';
+            baseCardClasses += ' border-gray-300';
+            break;
+        default: // Should not happen if logic is correct
+            specificCardStyles = 'transform: scale(0.5); opacity: 0; display: none;';
+            break;
+    }
+    cardWrapper.style.cssText = specificCardStyles;
+    cardWrapper.innerHTML = `
+        <div class="${baseCardClasses}">
+            <!-- Power Score Badge -->
+            <div class="absolute top-1 right-1 ${itemData.isUsed || itemData.isLocked ? 'bg-gray-400' : (itemData.type === 'fruit' ? 'bg-gradient-to-r from-blue-500 to-purple-500' : 'bg-gradient-to-r from-green-500 to-teal-500')} text-white text-[0.6rem] font-bold px-1.5 py-0.5 rounded-full shadow">
+                ${typeIcon} ${powerScore}
             </div>
-            
-            ${isAvailable ? `
-              <div class="mt-2 text-xs font-semibold text-${itemData.type === 'fruit' ? 'blue' : 'green'}-600">
-                Tap to select ✨
-              </div>
-            ` : ''}
-          </div>
-        </button>
-      `;
-    }).join('');
+            <div class="flex flex-col items-center h-full pt-2">
+                <div class="text-3xl sm:text-4xl mb-1">${emoji}</div>
+                <h3 class="text-xs sm:text-sm font-bold ${textClasses} text-center leading-tight mb-2 h-8 sm:h-10 flex items-center justify-center">${itemName}</h3>
+                <div class="w-full space-y-0.5 text-[0.6rem] sm:text-[0.65rem]">
+                    ${this.attributes.map(attr => { // Show all attributes
+                        const value = itemData.stats_per_kg[attr];
+                        const displayValue = value % 1 === 0 ? value : value.toFixed(1);
+                        const shortLabel = this.attributeNames[attr].split(' ')[0];
+                        const colorClass = this.attributeColors[attr];
+                        return `
+                            <div class="flex justify-between items-center bg-gray-50 rounded px-1.5 py-0.5">
+                                <span class="font-medium text-gray-500">${shortLabel}</span>
+                                <span class="font-bold ${textClasses} ${colorClass.replace('bg-', 'text-')} px-1 rounded">${displayValue}</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                ${(itemData.isCurrentlyAvailableToPick && !itemData.isUsed && position === 'focused') ? `
+                    <div class="mt-1.5 text-[0.6rem] font-semibold text-${itemData.type === 'fruit' ? 'blue' : 'green'}-600">
+                        Ready to Select!
+                    </div>
+                ` : ''}
+                 ${(itemData.isLocked && position === 'focused') ? `
+                    <div class="mt-1.5 text-[0.6rem] font-semibold text-yellow-600">
+                        Locked
+                    </div>
+                ` : ''}
+                 ${(itemData.isUsed && position === 'focused') ? `
+                    <div class="mt-1.5 text-[0.6rem] font-semibold text-gray-500">
+                        Used
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `;
+    return cardWrapper;
   }
-  
+
+  selectFocusedCardFromCarousel() {
+    if (!this.carouselPlayerTeamItems || this.carouselPlayerTeamItems.length === 0) return;
+    
+    const focusedItemData = this.carouselPlayerTeamItems[this.carouselCurrentIndex];
+    const canSelectFocused = focusedItemData.isCurrentlyAvailableToPick && !focusedItemData.isUsed;
+
+    if (canSelectFocused) {
+      this.selectPlayerCard(focusedItemData.name);
+    }
+  }
+
+  // Modify selectPlayerCard to hide the carousel modal
   selectPlayerCard(fruitName) {
     this.currentRound.player1Card = fruitName;
     
-    // Add to used fruits (unless it's already there)
     if (!this.usedFruits.includes(fruitName)) {
       this.usedFruits.push(fruitName);
     }
     
-    // Check if we need to unlock more items of the same type
-    this.checkAndUnlockItems();
+    this.checkAndUnlockItems(); // This logic might need review with new carousel
     
-    // Computer gets a random fruit from all available fruits (can reuse)
-    const computerChoices = this.allFruits.filter(f => f !== fruitName);
+    const computerChoices = this.allFruits.filter(f => f !== fruitName); // Computer can reuse
     this.currentRound.player2Card = computerChoices[Math.floor(Math.random() * computerChoices.length)];
     
     this.cardSelectionMode = false;
-    document.getElementById('fruitSelectionModal').style.display = 'none';
+    const fruitSelectionModal = document.getElementById('fruitSelectionModal');
+    if (fruitSelectionModal) {
+        fruitSelectionModal.style.display = 'none';
+    }
     
-    // Show cards - player card revealed, computer card face down
     this.displayCards();
     this.updateDisplay();
     
-    // If it's the computer's turn, show loading and make automatic choice after a delay
     if (this.currentPlayer === 2) {
       this.showComputerThinking();
       setTimeout(() => {
         this.hideComputerThinking();
         const computerChoice = this.getComputerChoice();
         this.selectAttribute(computerChoice);
-      }, 2000); // 2 second delay for suspense
+      }, 2000);
     }
   }
   
