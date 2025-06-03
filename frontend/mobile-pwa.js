@@ -1,7 +1,10 @@
+console.log('[PWA Debug] mobile-pwa.js script started');
+
 // Mobile touch event improvements and PWA functionality
 
 // Mobile touch event improvements
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('[PWA Debug] DOMContentLoaded event fired.');
     // Add text-base class to all text inputs to prevent zoom on focus (iOS)
     document.querySelectorAll('input[type="text"]').forEach(input => {
         input.classList.add('text-base', 'min-h-[44px]');
@@ -36,12 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // Register service worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./frontend/sw.js')
+        console.log('[PWA Install Debug] Attempting to register service worker...');
+        navigator.serviceWorker.register('./sw.js')
             .then(registration => {
-                console.log('SW registered: ', registration);
+                console.log('[PWA Install Debug] SW registered:', registration);
             })
             .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
+                console.error('[PWA Install Debug] SW registration failed:', registrationError);
             });
     });
 }
@@ -51,82 +55,101 @@ let deferredPrompt;
 
 // Function to detect if device is mobile
 function isMobileDevice() {
-    return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    console.log('[PWA Install Debug] Checking isMobileDevice(). User Agent:', navigator.userAgent);
+    const mobileCheck = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    console.log('[PWA Install Debug] isMobileDevice() returned:', mobileCheck);
+    return mobileCheck;
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('PWA install prompt triggered');
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    console.log('[PWA Debug] beforeinstallprompt event FIRED!');
     e.preventDefault();
-    // Stash the event so it can be triggered later
     deferredPrompt = e;
+    console.log('[PWA Debug] deferredPrompt has been stashed.');
     
-    // Show install button only on mobile devices if not already installed
-    if (isMobileDevice()) {
-        showInstallButton();
+    const installButton = document.getElementById('installBtn');
+    if (installButton) {
+        console.log('[PWA Debug] #installBtn found in DOM. Displaying it.');
+        installButton.style.display = 'flex';
+        installButton.onclick = installPWA;
+    } else {
+        console.error('[PWA Debug] #installBtn NOT found in DOM inside beforeinstallprompt!');
     }
 });
 
 function showInstallButton() {
-    // Show the existing install button instead of creating a new one
-    if (deferredPrompt && isMobileDevice()) {
+    console.log('[PWA Install Debug] showInstallButton() called (but likely bypassed by debug logic).');
+    if (deferredPrompt) { 
         const installButton = document.getElementById('installBtn');
         if (installButton) {
+            console.log('[PWA Install Debug] showInstallButton: #installBtn found, setting display to flex and attaching click handler.');
             installButton.style.display = 'flex';
             installButton.onclick = installPWA;
+        } else {
+            console.error('[PWA Install Debug] showInstallButton: Install button #installBtn NOT found in DOM!');
         }
+    } else {
+        console.log('[PWA Install Debug] showInstallButton() did NOT proceed. deferredPrompt is falsy.');
     }
 }
 
 function installPWA() {
+    console.log('[PWA Debug] installPWA() called.');
     if (deferredPrompt) {
-        // Show the prompt
         deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
         deferredPrompt.userChoice.then((choiceResult) => {
+            console.log('[PWA Debug] User choice:', choiceResult.outcome);
             if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the PWA install prompt');
-                // Hide install button
+                console.log('[PWA Debug] User accepted prompt.');
                 const installButton = document.getElementById('installBtn');
-                if (installButton) {
-                    installButton.style.display = 'none';
-                }
+                if (installButton) installButton.style.display = 'none';
             } else {
-                console.log('User dismissed the PWA install prompt');
+                console.log('[PWA Debug] User dismissed prompt.');
             }
             deferredPrompt = null;
         });
+    } else {
+        console.warn('[PWA Debug] installPWA called but deferredPrompt is null.');
     }
 }
 
-// Hide install button when app is installed
 window.addEventListener('appinstalled', (evt) => {
-    console.log('PWA was installed');
+    console.log('[PWA Debug] appinstalled event fired.');
     const installButton = document.getElementById('installBtn');
-    if (installButton) {
-        installButton.style.display = 'none';
-    }
+    if (installButton) installButton.style.display = 'none';
 });
 
-// Check if already running as PWA and hide install button
+console.log('[PWA Debug] Initial page load: Checking display mode.');
 if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-    console.log('App is running as PWA');
+    console.log('[PWA Debug] App is already in standalone mode. Hiding #installBtn.');
     const installButton = document.getElementById('installBtn');
     if (installButton) {
-        installButton.style.display = 'none';
+        // It might not be in the DOM yet if this runs before DOMContentLoaded
+        // So, defer hiding if not found, or ensure it's hidden in DOMContentLoaded too
+        installButton.style.display = 'none'; 
     }
+} else {
+    console.log('[PWA Install Debug] App is NOT running as PWA initially on load.');
 }
 
-// Additional mobile-specific PWA features
 document.addEventListener('DOMContentLoaded', function() {
-    // Only show install button on mobile if PWA not already installed
+    console.log('[PWA Install Debug] DOMContentLoaded event.');
     if (isMobileDevice() && !window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
-        // Check if install button should be shown based on browser support
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
+        console.log('[PWA Install Debug] DOMContentLoaded: Device is mobile and not standalone.');
+        if ('serviceWorker' in navigator && 'PushManager' in window) { 
             const installButton = document.getElementById('installBtn');
-            if (installButton && deferredPrompt) {
+            if (installButton && deferredPrompt) { 
+                console.log('[PWA Install Debug] DOMContentLoaded: deferredPrompt exists, ensuring install button is visible.');
                 installButton.style.display = 'flex';
+            } else if (installButton) {
+                 console.log('[PWA Install Debug] DOMContentLoaded: deferredPrompt NOT YET set, button remains hidden by default CSS.');
             }
+        }
+    } else {
+        console.log('[PWA Install Debug] DOMContentLoaded: Device not mobile or already standalone. Hiding button if it exists.');
+        const installButton = document.getElementById('installBtn');
+        if (installButton) {
+             installButton.style.display = 'none';
         }
     }
 }); 
