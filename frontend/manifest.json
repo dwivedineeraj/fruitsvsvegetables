@@ -2,12 +2,12 @@
   "name": "Fruits vs Vegetables Battle - Kids Nutrition Game",
   "short_name": "Nutrition Battle",
   "description": "Fun educational game helping kids learn about healthy eating through interactive fruit and vegetable battles. Perfect for parents teaching nutrition!",
-  "start_url": "/",
+  "start_url": "https://dwivedineeraj.github.io/fruitsvsvegetables/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4f46e5",
   "orientation": "portrait-primary",
-  "scope": "../",
+  "scope": "https://dwivedineeraj.github.io/fruitsvsvegetables/",
   "lang": "en",
   "icons": [
     {
