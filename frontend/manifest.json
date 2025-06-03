@@ -37,7 +37,7 @@
   "screenshots": [
     {
       "src": "https://dwivedineeraj.github.io/fruitsvsvegetables/frontend/images/gameplay.jpg",
-      "sizes": "350x595",
+      "sizes": "358x595",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Gameplay on Mobile"
