@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         console.log('[PWA Install Debug] Attempting to register service worker...');
-        navigator.serviceWorker.register('./sw.js')
+        navigator.serviceWorker.register('./frontend/sw.js')
             .then(registration => {
                 console.log('[PWA Install Debug] SW registered:', registration);
             })
