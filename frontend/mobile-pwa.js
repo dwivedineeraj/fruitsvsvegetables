@@ -40,9 +40,10 @@ document.addEventListener('DOMContentLoaded', function() {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         console.log('[PWA Install Debug] Attempting to register service worker...');
-        navigator.serviceWorker.register('./frontend/sw.js')
+        navigator.serviceWorker.register('https://dwivedineeraj.github.io/fruitsvsvegetables/sw.js')
             .then(registration => {
                 console.log('[PWA Install Debug] SW registered:', registration);
+                console.log('[PWA Install Debug] SW scope:', registration.scope);
             })
             .catch(registrationError => {
                 console.error('[PWA Install Debug] SW registration failed:', registrationError);
