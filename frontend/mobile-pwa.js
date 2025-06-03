@@ -63,56 +63,37 @@ function isMobileDevice() {
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('[PWA Debug] beforeinstallprompt event FIRED!');
-    e.preventDefault();
-    deferredPrompt = e;
-    console.log('[PWA Debug] deferredPrompt has been stashed.');
+    console.log('*****************************************************');
+    console.log('[PWA Debug] RAW beforeinstallprompt event FIRED! Event object:', e);
+    console.log('*****************************************************');
+    e.preventDefault(); // Still prevent the mini-infobar
+    window.debugDeferredPrompt = e; // Store it globally for easy inspection
     
     const installButton = document.getElementById('installBtn');
     if (installButton) {
-        console.log('[PWA Debug] #installBtn found in DOM. Displaying it.');
+        console.log('[PWA Debug] Attempting to show #installBtn from raw B.I.P. handler.');
         installButton.style.display = 'flex';
-        installButton.onclick = installPWA;
+        // Temporarily assign a simpler click handler for testing:
+        installButton.onclick = () => {
+            console.log('[PWA Debug] Install button clicked (simple test). Prompting...');
+            if (window.debugDeferredPrompt) {
+                window.debugDeferredPrompt.prompt();
+                window.debugDeferredPrompt.userChoice.then((choiceResult) => {
+                    console.log('[PWA Debug] User choice (simple test): ', choiceResult.outcome);
+                    window.debugDeferredPrompt = null; // Clear it after use
+                    if (choiceResult.outcome === 'accepted') {
+                        installButton.style.display = 'none';
+                    }
+                });
+            } else {
+                console.error('[PWA Debug] debugDeferredPrompt is null on click!');
+            }
+        };
+        console.log('[PWA Debug] #installBtn should be visible now with test click handler.');
     } else {
-        console.error('[PWA Debug] #installBtn NOT found in DOM inside beforeinstallprompt!');
+        console.error('[PWA Debug] #installBtn still NOT found in DOM inside raw B.I.P. handler!');
     }
 });
-
-function showInstallButton() {
-    console.log('[PWA Install Debug] showInstallButton() called (but likely bypassed by debug logic).');
-    if (deferredPrompt) { 
-        const installButton = document.getElementById('installBtn');
-        if (installButton) {
-            console.log('[PWA Install Debug] showInstallButton: #installBtn found, setting display to flex and attaching click handler.');
-            installButton.style.display = 'flex';
-            installButton.onclick = installPWA;
-        } else {
-            console.error('[PWA Install Debug] showInstallButton: Install button #installBtn NOT found in DOM!');
-        }
-    } else {
-        console.log('[PWA Install Debug] showInstallButton() did NOT proceed. deferredPrompt is falsy.');
-    }
-}
-
-function installPWA() {
-    console.log('[PWA Debug] installPWA() called.');
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-            console.log('[PWA Debug] User choice:', choiceResult.outcome);
-            if (choiceResult.outcome === 'accepted') {
-                console.log('[PWA Debug] User accepted prompt.');
-                const installButton = document.getElementById('installBtn');
-                if (installButton) installButton.style.display = 'none';
-            } else {
-                console.log('[PWA Debug] User dismissed prompt.');
-            }
-            deferredPrompt = null;
-        });
-    } else {
-        console.warn('[PWA Debug] installPWA called but deferredPrompt is null.');
-    }
-}
 
 window.addEventListener('appinstalled', (evt) => {
     console.log('[PWA Debug] appinstalled event fired.');
