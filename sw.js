@@ -13,7 +13,13 @@ const urlsToCache = [
   host + 'frontend/icons/icon-512.jpg',
   host + 'frontend/icons/icon-192.jpg',
   host + 'frontend/icons/icon-144.jpg',
-  host + 'frontend/icons/icon-72.jpg'
+  host + 'frontend/icons/icon-72.jpg',
+  host + 'frontend/images/gameplay.jpg',
+  host + 'frontend/images/gameplay_wide.jpg',
+  host + 'frontend/images/icon-192.png',
+  host + 'frontend/images/icon-512.png',
+  host + 'frontend/images/icon-144.png',
+  host + 'frontend/images/icon-72.png'
 ];
 
 // Install event - cache resources
